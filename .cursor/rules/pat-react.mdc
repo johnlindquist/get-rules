@@ -3,11 +3,6 @@ description:
 globs: *.tsx
 alwaysApply: false
 ---
----
-description:
-globs:
-alwaysApply: false
----
 ## React useEffect Dependency Rule
 
 To avoid infinite loops with useEffect, don't put functions in the dependency array unless they're stable. For on-mount effects, use an empty array ([]). If a function must be a dependency, wrap it in useCallback
