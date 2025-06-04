@@ -7,6 +7,16 @@ alwaysApply: false
 
 **Your task: Scan all files within the `docs/` directory to find comments or notes marked as "TODO", and then list the most pressing or contextually relevant ones.**
 
+## File Existence Check
+
+List the documentation directory to confirm presence:
+
+```bash
+ls . docs
+```
+
+Then continue with the scanning steps.
+
 Follow this process:
 
 1.  **Scan Documentation for TODOs:**

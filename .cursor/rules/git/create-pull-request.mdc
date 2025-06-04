@@ -7,6 +7,16 @@ alwaysApply: false
 
 **Your Task: Follow this comprehensive checklist to prepare and create a well-documented, clean, and accurate Pull Request (PR) using the `gh` CLI.**
 
+## File Existence Check
+
+Confirm the presence of `.gitignore` and the PR body file location:
+
+```bash
+ls . docs
+```
+
+Use this information before running the remaining steps.
+
 0.  **Pre-check: Unstaged Changes**
     - **Action:** Execute `git status`.
     - **Review:** Identify any modified or new files relevant to this PR that are not yet staged.
@@ -56,5 +66,7 @@ alwaysApply: false
 # Ensure branch is pushed first: git push -u origin fix-label-sanitization
 gh pr create --title "fix: Enforce normalized, dash-separated, lowercase labels" --body-file docs/pr/pr-body-file-fix-label-sanitization.md
 ```
+
+After creating the pull request, give a concise executive summary of the key changes and tests so reviewers know what to expect. Keep this summary separate from the PR body file.
 
 **REMEMBER: The objective is to create a meticulously prepared Pull Request. This includes clean commits, a descriptive title, a comprehensive body, and adherence to any project-specific pre-PR checks. A high-quality PR facilitates easier review and smoother integration.**

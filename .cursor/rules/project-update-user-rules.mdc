@@ -3,9 +3,20 @@ description:
 globs:
 alwaysApply: false
 ---
-# Update Project Context File: .cursor/rules/_project.mdc
+# Update User Project Context File: .cursor/rules/_user-<username>.mdc
 
-**Your primary task: Meticulously update the `./cursor/rules/_project.mdc` file. Use ONLY information found within the current project's files and documentation.**
+**Your primary task: Meticulously update the `./cursor/rules/_user-<username>.mdc` file. Use ONLY information found within the current project's files and documentation.**
+## Determine GitHub Username
+
+Run the following to capture your authenticated GitHub username:
+```bash
+GH_USER=$( (gh api user --jq .login 2>/dev/null || git config user.username || git config user.name) \
+  | tr '[:upper:]' '[:lower:]' \
+  | xargs \
+  | tr ' ' '-' \
+  | tr -d '\n' )
+```
+Then replace `<username>` in the file path with `$GH_USER`.
 
 ## File Existence Check
 
@@ -19,7 +30,7 @@ Use the output to see which files are available to read.
 
 ## 1. Core Objective
 
-Your goal is to populate the `./cursor/rules/_project.mdc` file. This file must accurately reflect the project's current configuration, technology stack, structure, standards, and tooling, serving as a central project reference.
+Your goal is to populate the `./cursor/rules/_user-<username>.mdc` file. This file must accurately reflect the project's current configuration, technology stack, structure, standards, and tooling, serving as a central project reference.
 
 ## 2. Information Gathering (Strictly from Project Sources)
 
@@ -40,26 +51,26 @@ Follow these steps precisely to gather the necessary information:
 - Thoroughly read all files located within the `docs/` directory (and its subdirectories). Prioritize `README.md`, `CONTRIBUTING.md`, architecture diagrams, technical specifications, or any documents describing the project's setup, conventions, and purpose.
 - Examine the structure of main source directories (e.g., `src/`, `app/`, `lib/`, `packages/`) to understand module organization and identify key architectural patterns.
 
-## 3. Updating `./cursor/rules/_project.mdc`
+## 3. Updating `./cursor/rules/_user-<username>.mdc`
 
 ### Step 3: Populate the Template:
-- Open the `./cursor/rules/_project.mdc` file for editing.
+- Open the `./cursor/rules/_user-<username>.mdc` file for editing.
 - Using the information gathered in Steps 1 and 2, meticulously fill in each section of the template provided below.
 - **Crucial:** Adhere strictly to the template's structure and placeholders. Provide specific examples and details where requested (e.g., actual library names, version numbers, file paths).
 - **Handling Missing Information:** If, after thorough investigation, specific information required by the template cannot be definitively found within the project's files or `docs/` directory, explicitly state `[Information not found in project context]` or `[N/A]` in the corresponding field. **ABSOLUTELY DO NOT invent, infer, or use external knowledge.** It is critical to indicate missing information rather than provide incorrect data.
 
 ## 4. Output Requirements
 
-- Your SOLE output must be the fully updated content of the `./cursor/rules/_project.mdc` file.
+- Your SOLE output must be the fully updated content of the `./cursor/rules/_user-<username>.mdc` file.
 - Ensure the output is valid Markdown.
 
 ---
-**REMEMBER: Your objective is to produce an accurate, detailed, and comprehensive `./cursor/rules/_project.mdc` file. This file MUST be populated using *only* information extracted directly from THIS project's codebase and its documentation. Adhere strictly to the provided template. After updating the file with all available project-specific information (or marking details as 'not found'), your task is complete.**
+**REMEMBER: Your objective is to produce an accurate, detailed, and comprehensive `./cursor/rules/_user-<username>.mdc` file. This file MUST be populated using *only* information extracted directly from THIS project's codebase and its documentation. Adhere strictly to the provided template. After updating the file with all available project-specific information (or marking details as 'not found'), your task is complete.**
 ---
 
-## .cursor/rules/_project.mdc Template
+## .cursor/rules/_user-<username>.mdc Template
 
-Use this template as guide for creating the _project.mdc:
+Use this template as guide for creating the _user-<username>.mdc:
 
 <template>
 ---
@@ -161,6 +172,6 @@ ide recommendations: [e.g., VS Code with specific extensions (check `.vscode/ext
   ]
 </template>
 
-Remember: the frontmatter for `_project.mdc` must have alwaysApply set to true.
+Remember: the frontmatter for `_user-<username>.mdc` must have alwaysApply set to true.
 
-After outputting the completed `_project.mdc` file, provide a concise executive summary of the major sections you filled in or updated. Keep this summary separate from the file content so the user can quickly review the changes.
+After outputting the completed `_user-<username>.mdc` file, provide a concise executive summary of the major sections you filled in or updated. Keep this summary separate from the file content so the user can quickly review the changes.

@@ -7,6 +7,16 @@ alwaysApply: false
 
 *This rule guides the creation and maintenance of the `docs/openapi.yaml` file.*
 
+## File Existence Check
+
+Before editing, determine which related docs already exist:
+
+```bash
+ls . docs
+```
+
+Use this information to inform the following steps.
+
 ### Core Directive
 Create and maintain an `docs/openapi.yaml` file, defining an OpenAPI specification (v3.0.x or 3.1.x). Operate based on information from `NOTES.md`, `docs/PRD.md`, `docs/TECH_STACK.md`, and the existing `docs/openapi.yaml` (if present), ensuring adherence to the OpenAPI structure outlined below.
 
@@ -72,3 +82,5 @@ The `docs/openapi.yaml` file must follow the structure below, derived from the "
                 - `format`: (e.g., uuid, email, int64) (Optional)
                 - `description`: (A brief explanation of the property) (Optional)
                 - `example`: (A sample value) (Optional)
+
+After outputting the full `docs/openapi.yaml` file, give a brief executive summary outlining the main endpoints or components you defined. This summary should not be included inside the YAML file itself.

@@ -7,6 +7,16 @@ alwaysApply: false
 
 **Your task: Create a new file at `docs/STRUCTURE.md` that outlines the recommended file and directory structure for this project, along with guiding principles.**
 
+## File Existence Check
+
+Before analyzing, verify which documentation files are present:
+
+```bash
+ls . docs
+```
+
+Use this to know your available references.
+
 Follow these steps:
 
 1.  **Analyze Documentation:**
@@ -28,5 +38,7 @@ Follow these steps:
 **Output:**
 
 Your primary output is the complete content for the new `docs/STRUCTURE.md` file.
+
+After providing this file content, give a brief executive summary of the recommended structure so the user can quickly understand the key directories and their purposes. Keep this summary separate from the file content.
 
 **REMEMBER: The goal is to produce a `docs/STRUCTURE.md` file that serves as a practical guide for organizing files and directories within this project, promoting consistency and maintainability.**

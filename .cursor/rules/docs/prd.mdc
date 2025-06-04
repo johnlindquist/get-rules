@@ -7,6 +7,16 @@ alwaysApply: false
 
 **Your Core Task: Create or update the `docs/PRD.md` file. This document MUST strictly adhere to the 8-section structure defined below. Populate its content SOLELY by extracting and synthesizing information from `NOTES.md` (or a user-provided equivalent source). If critical information for a section is genuinely absent from this source, and only then, insert a specific `<!-- TODO: ... -->` comment.**
 
+## File Existence Check
+
+Confirm available source files first:
+
+```bash
+ls . docs
+```
+
+Use these results before proceeding.
+
 Your entire output for this rule invocation **MUST BE ONLY** the complete, raw Markdown content of the `docs/PRD.md` file.
 
 ## I. Strict Operational Constraints (MANDATORY)
@@ -84,5 +94,7 @@ The `docs/PRD.md` file **MUST** be organized into the following eight sections. 
             - Example for section 5 if acceptance criteria are absent: `<!-- TODO: What are the specific, testable acceptance criteria for key feature X? (Expected in NOTES.md) -->`
 
 4.  **Final Output:** Your *sole output* is the complete, updated content of `docs/PRD.md`.
+
+Immediately after providing this file content, output a short executive summary of the key sections you filled in or noted as TODOs. Keep this summary separate from the file content.
 
 **REMEMBER: Your output MUST ONLY be the full Markdown content for `docs/PRD.md`. Populate it strictly from `NOTES.md` (or specified primary source). Follow the 8-section structure. Insert `<!-- TODO: ... -->` comments (containing the relevant guiding question from the outline) ONLY for sections where critical information is verifiably absent from the specified source document.**

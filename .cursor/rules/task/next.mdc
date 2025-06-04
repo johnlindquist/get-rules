@@ -7,6 +7,16 @@ alwaysApply: false
 
 **Your primary task: Identify and recommend the most logical next development task based on the current project state and goals.**
 
+## File Existence Check
+
+Check for key documentation files first:
+
+```bash
+ls . docs
+```
+
+Use these results to inform your analysis.
+
 To achieve this, follow these thought processes:
 
 1.  **Understand Context:**

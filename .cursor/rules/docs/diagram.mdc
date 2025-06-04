@@ -7,6 +7,16 @@ alwaysApply: false
 
 **Your Task: When asked to create a diagram, generate it using Mermaid syntax suitable for rendering directly in GitHub Flavored Markdown. Store the diagram in a new file at `docs/diagrams/<diagram-name>.md`. Adhere strictly to the following rules to ensure compatibility and readability.**
 
+## File Existence Check
+
+Run the following command to see which source documents are available:
+
+```bash
+ls . docs
+```
+
+Use the output to know which files exist before proceeding.
+
 ## I. Preliminary Step: Gather Context for the Diagram
 
 Before generating any diagram, you **MUST** attempt to read and understand the content of the following project documents (if they exist and are relevant to the diagram request):

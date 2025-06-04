@@ -7,6 +7,16 @@ alwaysApply: false
 
 **Your Core Task: Create or update the `docs/TECH_STACK.md` file. This document MUST strictly adhere to the 10-section structure defined below. Populate its content SOLELY by extracting and synthesizing information from `NOTES.md`, `docs/PRD.md`, and `docs/openapi.yaml` (or equivalent API specifications). If critical information for a section is genuinely absent from these sources, and only then, insert a specific `<!-- TODO: ... -->` comment.**
 
+## File Existence Check
+
+Determine which of the following files are present:
+
+```bash
+ls . docs
+```
+
+Use this list before editing.
+
 Your entire output for this rule invocation **MUST BE ONLY** the complete, raw Markdown content of the `docs/TECH_STACK.md` file.
 
 ## I. Strict Operational Constraints (MANDATORY)
@@ -97,5 +107,7 @@ The `docs/TECH_STACK.md` file **MUST** be organized into the following ten secti
             - Example for section 2 if backend language choice isn't found: `<!-- TODO: What primary programming language(s) will be used for the backend? Specify version(s) if critical. Why this choice? -->`
 
 4.  **Final Output:** Your *sole output* is the complete, updated content of `docs/TECH_STACK.md`.
+
+Immediately after providing this file content, output a short executive summary of the key sections you filled in or marked with TODOs. This summary should come after the file content and remain separate from it.
 
 **REMEMBER: Your output MUST ONLY be the full Markdown content for `docs/TECH_STACK.md`. Populate it strictly from `NOTES.md`, `docs/PRD.md`, and `docs/openapi.yaml`. Follow the 10-section structure. Insert `<!-- TODO: ... -->` comments (containing the guiding question from the outline) ONLY for sections where critical information is verifiably absent from all specified source documents.**

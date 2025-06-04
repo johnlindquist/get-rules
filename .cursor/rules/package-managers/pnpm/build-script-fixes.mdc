@@ -7,6 +7,16 @@ alwaysApply: false
 
 **Your task: When `pnpm` blocks essential build scripts from trusted dependencies during installation or execution, apply one of the following solutions.**
 
+## File Existence Check
+
+Determine if `package.json` is present before modifying it:
+
+```bash
+ls . docs
+```
+
+Proceed according to the result.
+
 This typically occurs because `pnpm` defaults to not running build scripts for security reasons. For well-known and trusted libraries, you may need to explicitly allow them.
 
 ## Solutions:

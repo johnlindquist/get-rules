@@ -3,9 +3,10 @@ description:
 globs:
 alwaysApply: false
 ---
-# Create a Detailed, Verifiable Task Plan
+# Create a GitHub Issue Task Plan
 
-**Your Core Task: Generate a multi-commit task plan file, saved as `docs/tasks/<YYYY-MM-DD-HH-MM-task-name>.md`. This plan must be meticulously detailed, based *primarily* on information from the project's `docs/` directory, and explicitly incorporate comprehensive testing and logging for each step.**
+
+**Your Core Task: Generate a multi-commit task plan and post it as a GitHub issue using the `gh` CLI. The issue body must contain the entire plan. No local task file is created.**
 
 ## File Existence Check
 
@@ -20,7 +21,7 @@ Use the results to tailor the task plan.
 ## I. Pre-computation: Capture Timestamp
 
 1.  **Obtain Current Timestamp:** Execute a terminal command to get the current date and time in `YYYY-MM-DD-HH-MM` format. (Example for Linux/macOS: `date +"%Y-%m-%d-%H-%M"`).
-2.  **Formulate Filename:** Use this timestamp and a descriptive task name (derived from user request or PRD) to construct the full filename, e.g., `docs/tasks/2023-10-27-14-35-implement-user-auth.md`.
+2.  **Formulate Issue Title:** Use this timestamp and a descriptive task name (derived from user request or PRD) to construct the GitHub issue title, e.g., `2023-10-27-14-35 implement user auth`.
 
 ## II. Information Gathering (CRITICAL PRE-REQUISITE)
 
@@ -36,16 +37,16 @@ Use the results to tailor the task plan.
 
 ## III. Core Directive: Construct the Task Plan File
 
-Create the content for the `docs/tasks/<YYYY-MM-DD-HH-MM-task-name>.md` file. This file outlines a step-by-step plan, broken down into a series of distinct commits (typically 2-5 commits per task). Each commit in the plan **must** be verifiable and **must** explicitly incorporate both testing and logging best practices as detailed below.
+Create the issue body content. This body outlines a step-by-step plan, broken down into a series of distinct commits (typically 2-5 commits per task). Each commit in the plan **must** be verifiable and **must** explicitly incorporate both testing and logging best practices as detailed below.
 
 ### A. Strict Operational Constraints
 
 - **File Operations:**
-    - You are **ONLY** permitted to write to the specific task plan file you are creating (e.g., `docs/tasks/YYYY-MM-DD-HH-MM-task-name.md`).
+    - **No Local Files:** Do NOT create any local task file. The entire plan will be posted as a GitHub issue via `gh issue create`.
     - Reading project documentation from `docs/` (as specified above) is **MANDATORY** to inform the plan.
 - **Communication Protocol:**
-    - **NO Conversational Output:** You are forbidden from generating any conversational output, commentary, preamble, or summaries *before* or *during* the creation of the task plan file content.
-    - **Output is the File Content:** Your *entire* output for this specific rule invocation must be *only* the complete, raw Markdown content of the `docs/tasks/<YYYY-MM-DD-HH-MM-task-name>.md` file.
+    - **NO Conversational Output:** You are forbidden from generating any conversational output, commentary, preamble, or summaries *before* or *during* creation of the issue body.
+    - **Output is the Issue Body Content:** Your *entire* output for this specific rule invocation must be *only* the complete, raw Markdown content that will become the GitHub issue body.
 - **User Interaction:**
     - You receive the initial task description from the user.
     - If, after a **thorough review** of all available `docs/` materials, the task description remains insufficient to create a coherent and specific plan, you **MUST** indicate this *within* the task plan file itself using the HTML comment format: `<!-- TODO: [Specify missing information and reference document, e.g., 'Need API endpoint for user creation (see docs/openapi.yaml)'] -->`. Do not invent details.
@@ -70,13 +71,13 @@ Create the content for the `docs/tasks/<YYYY-MM-DD-HH-MM-task-name>.md` file. Th
     - **If Integration Test:** Specify the exact command or script (e.g., `pnpm test:e2e --spec ./tests/e2e/auth.spec.ts`) AND describe the expected outcome or key behavior being verified.
     - **If Log Inspection (Fallback):** Detail the precise steps to inspect logs (e.g., `kubectl logs -l app=api-service -c main-container --tail=100 | jq 'select(.msg == "PaymentProcessed")'`) and what specific log message/pattern/value to look for.
 
-### C. `docs/tasks/<YYYY-MM-DD-HH-MM-task-name>.md` File Structure
+### Issue Body Structure
 
-The task file **MUST** be structured as a sequence of planned commits. The primary source for content is the user's task description, **validated, augmented, and detailed** with specific information (file paths, function names, API endpoints, configuration details) extracted from the relevant `docs/` files. **Neglecting to consult and incorporate details from project documentation is a critical failure.**
+The issue body **MUST** be structured as a sequence of planned commits. The primary source for content is the user's task description, **validated, augmented, and detailed** with specific information (file paths, function names, API endpoints, configuration details) extracted from the relevant `docs/` files. **Neglecting to consult and incorporate details from project documentation is a critical failure.**
 
 Each commit title **MUST** follow semantic commit style (e.g., `feat: ...`, `fix: ...`, `test: ...`, `docs: ...`, `chore: ...`) **and**
-include the task filename in square brackets so each commit can be traced back to
-its plan. Example: `feat: add login API [docs/tasks/2023-10-31-login.md]`.
+include the GitHub issue number in parentheses for traceability. Example:
+`feat: add login API (#42)`.
 
 ```markdown
 # Task: [Brief Task Title - Derived from user request, PRD, or overarching goal]
@@ -117,13 +118,12 @@ its plan. Example: `feat: add login API [docs/tasks/2023-10-31-login.md]`.
 
 ## IV. Post Task Plan Creation: Stop and Notify
 
+After posting the issue with the complete body via `gh issue create`, **STOP**. Notify the user of the newly created issue number or URL.
 
-Once the *entire content* of the `docs/tasks/<YYYY-MM-DD-HH-MM-task-name>.md` file has been generated (and is your sole output for this rule), **STOP**. Notify the user that the task plan is complete and available at the specified path.
+**Immediately after** posting, provide a short executive summary of the planned commits so the user can quickly review the steps. This summary must not be part of the issue body itself.
 
-**Immediately after** providing the file content, output a concise executive summary of all the planned commits so the user can quickly review the steps. This summary should not be part of the task plan file itself.
+After delivering the summary, await the user's next instructions.
 
-After the summary, await the user's next instructions.
-
-**REMEMBER: Your output is SOLELY the Markdown content of the task plan file. This plan MUST be informed by `docs/` research, detail 2-5 verifiable commits, and rigorously include both automated tests and toggleable logging for each commit. Adhere strictly to the output format and communication constraints.**
+**REMEMBER: Your output is SOLELY the Markdown content of the issue body. This plan MUST be informed by `docs/` research, detail 2-5 verifiable commits, and rigorously include both automated tests and toggleable logging for each commit. Adhere strictly to the output format and communication constraints.**
 
 Once the task plan is complete, wait for the user to provide feedback.

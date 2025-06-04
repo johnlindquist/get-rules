@@ -7,6 +7,16 @@ alwaysApply: false
 
 **Your task: Create new, executable TypeScript scripts within a `scripts` directory, runnable with `bun`.**
 
+## File Existence Check
+
+See if the `scripts/` directory already exists:
+
+```bash
+ls . docs
+```
+
+Then follow the steps below.
+
 Follow these steps precisely:
 
 1.  **Ensure `scripts` Directory:** If it doesn't already exist, create a `scripts/` directory in the project root.

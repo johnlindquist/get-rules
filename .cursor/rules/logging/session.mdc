@@ -7,6 +7,16 @@ alwaysApply: false
 
 **Your Task: Implement structured logging so each application run writes to a separate file in the `logs/` directory.**
 
+## File Existence Check
+
+Verify logging directory and ignore file:
+
+```bash
+ls . docs
+```
+
+Create missing items if necessary before proceeding.
+
 ## I. Directory & Git Ignore
 
 1. Ensure a `logs/` directory exists at the project root. Create it if missing.

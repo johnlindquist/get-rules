@@ -5,6 +5,7 @@ alwaysApply: false
 ---
 # Synchronize Project Documentation with Recent Changes
 
+
 **Your task: Review and update all project documentation within the `docs/` directory to ensure it accurately reflects the latest project state, recent code changes, and completed tasks.**
 
 ## File Existence Check
@@ -20,7 +21,7 @@ Proceed based on the results.
 Follow this process:
 
 1.  **Identify Recent Project Developments:**
-    - Review information about recently completed tasks (e.g., from `docs/tasks/`, task management systems if accessible, or summarized in recent discussions).
+    - Review information about recently completed tasks by querying closed GitHub issues (e.g., `gh issue list --state closed --label task`).
     - Examine recent commit history for significant changes to code, features, or configurations.
     - Consider any new features added or bugs fixed that might impact documentation.
 
