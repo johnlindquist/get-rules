@@ -4,26 +4,40 @@ const https = require("https");
 const fs = require("fs");
 const path = require("path");
 const os = require("os");
+const chalk = require("chalk");
+const ora = require("ora").default || require("ora");
+const prompts = require("prompts");
 
 const DEFAULT_ORG = "johnlindquist";
 const DEFAULT_REPO = "get-rules";
 const RULES_PATH = ".cursor/rules";
 
-// Parse optional org/repo argument
-const userArg = process.argv[2];
-let org = DEFAULT_ORG;
-let repo = DEFAULT_REPO;
-if (userArg && /^[^/]+\/[^/]+$/.test(userArg)) {
-	[org, repo] = userArg.split("/");
-	console.log(`Using custom repo: ${org}/${repo}`);
-} else if (userArg) {
-	console.warn(
-		`Ignoring invalid argument '${userArg}'. Expected format: org/repo`,
+// Display welcome message and instructions
+function displayWelcome() {
+	console.log();
+	console.log(chalk.cyan.bold("🚀 Welcome to get-rules!"));
+	console.log(chalk.gray("═".repeat(60)));
+	console.log();
+	console.log("This tool downloads Cursor AI rules from a GitHub repository.");
+	console.log(`Rules will be downloaded to: ${chalk.yellow(".cursor/rules/")}`);
+	console.log(
+		chalk.dim("Downloads: .mdc rule files, .gitignore, and .gitkeep files"),
 	);
+	console.log();
+	console.log(chalk.dim("You can:"));
+	console.log(
+		chalk.dim("  • Use the default repository (johnlindquist/get-rules)"),
+	);
+	console.log(
+		chalk.dim("  • Specify your own repository in the format: org/repo"),
+	);
+	console.log(
+		chalk.dim("  • Pass the repo as an argument: get-rules org/repo"),
+	);
+	console.log();
+	console.log(chalk.gray("═".repeat(60)));
+	console.log();
 }
-
-const GITHUB_API_URL = `https://api.github.com/repos/${org}/${repo}/contents/${RULES_PATH}`;
-const DEST_DIR_NAME = RULES_PATH; // Relative to current working directory
 
 // Helper function to make an HTTPS GET request and parse JSON response
 function httpsGetJson(url) {
@@ -92,12 +106,19 @@ function downloadFile(fileUrl, destinationPath) {
 }
 
 // Recursive function to download all files from a directory
-async function downloadDirectory(apiUrl, localPath, basePath = "") {
+async function downloadDirectory(
+	apiUrl,
+	localPath,
+	basePath = "",
+	stats = { downloaded: 0, errors: 0, moved: 0 },
+) {
 	try {
 		const contents = await httpsGetJson(apiUrl);
-		
+
 		if (!Array.isArray(contents)) {
-			console.error(`Error: Expected array from ${apiUrl}, got:`, contents);
+			console.error(
+				chalk.red(`Error: Expected array from ${apiUrl}, got:`, contents),
+			);
 			return;
 		}
 
@@ -109,60 +130,175 @@ async function downloadDirectory(apiUrl, localPath, basePath = "") {
 				// Create directory locally
 				if (!fs.existsSync(localItemPath)) {
 					fs.mkdirSync(localItemPath, { recursive: true });
-					console.log(`  - Created directory: ${itemPath}`);
+					console.log(chalk.dim(`  📁 Created directory: ${itemPath}`));
 				}
 				// Recursively download directory contents
-				await downloadDirectory(item.url, localItemPath, itemPath);
-			} else if (item.type === "file" && item.name.endsWith(".mdc")) {
-				// Download .mdc files
+				await downloadDirectory(item.url, localItemPath, itemPath, stats);
+			} else if (
+				item.type === "file" &&
+				(item.name.endsWith(".mdc") ||
+					item.name.endsWith(".md") ||
+					item.name === ".gitignore" ||
+					item.name === ".gitkeep")
+			) {
+				// Download .mdc, .gitignore, and .gitkeep files
 				if (item.download_url) {
 					if (fs.existsSync(localItemPath)) {
 						// Move existing file to temp
 						const tempDir = os.tmpdir();
-						const tempFilePath = path.join(tempDir, `${item.name}.${Date.now()}`);
+						const tempFilePath = path.join(
+							tempDir,
+							`${item.name}.${Date.now()}`,
+						);
 						fs.renameSync(localItemPath, tempFilePath);
-						console.log(`  - ${itemPath} existed, moved to temp: ${tempFilePath}`);
+						console.log(chalk.dim(`  ↻ ${itemPath} existed, moved to temp`));
+						stats.moved++;
 					}
-					console.log(`  - Downloading ${itemPath}...`);
 					try {
 						await downloadFile(item.download_url, localItemPath);
+						console.log(chalk.green(`  ✓ Downloaded ${itemPath}`));
+						stats.downloaded++;
 					} catch (downloadError) {
-						console.error(`    Failed to download ${itemPath}: ${downloadError.message}`);
+						console.error(
+							chalk.red(
+								`  ✗ Failed to download ${itemPath}: ${downloadError.message}`,
+							),
+						);
+						stats.errors++;
 					}
 				}
 			}
 		}
 	} catch (error) {
-		console.error(`Error processing directory ${apiUrl}: ${error.message}`);
+		console.error(
+			chalk.red(`Error processing directory ${apiUrl}: ${error.message}`),
+		);
+		stats.errors++;
 	}
+	return stats;
 }
 
 async function main() {
-	const absoluteDestDir = path.resolve(process.cwd(), DEST_DIR_NAME);
-	console.log(`Attempting to install rules to ${absoluteDestDir}`);
+	let org, repo;
+
+	// Check if argument was provided
+	const userArg = process.argv[2];
+
+	if (userArg && /^[^/]+\/[^/]+$/.test(userArg)) {
+		// Valid argument provided, use it directly
+		[org, repo] = userArg.split("/");
+		console.log(chalk.cyan(`\nUsing repository: ${org}/${repo}`));
+	} else if (userArg) {
+		// Invalid argument provided
+		console.warn(
+			chalk.yellow(
+				`\n⚠️  Invalid argument '${userArg}'. Expected format: org/repo`,
+			),
+		);
+		console.log("Proceeding with interactive mode...\n");
+	}
+
+	// If no valid argument, show interactive prompt
+	if (!org || !repo) {
+		displayWelcome();
+
+		const response = await prompts({
+			type: "text",
+			name: "repository",
+			message: `Enter GitHub repository`,
+			initial: `${DEFAULT_ORG}/${DEFAULT_REPO}`,
+			validate: (value) =>
+				/^[^/]+\/[^/]+$/.test(value) || "Invalid format. Expected: org/repo",
+		});
+
+		if (!response.repository) {
+			console.log(chalk.yellow("\n⚠️  Operation cancelled"));
+			process.exit(0);
+		}
+
+		[org, repo] = response.repository.split("/");
+		console.log(chalk.cyan(`\n✓ Using repository: ${org}/${repo}`));
+	}
+
+	// Construct the API URL with the selected repo
+	const GITHUB_API_URL = `https://api.github.com/repos/${org}/${repo}/contents/${RULES_PATH}`;
+	const absoluteDestDir = path.resolve(process.cwd(), RULES_PATH);
+
+	console.log(
+		chalk.dim(`\n📁 Rules will be downloaded to: ${absoluteDestDir}`),
+	);
+	console.log(chalk.gray("─".repeat(60)));
+
+	const spinner = ora({
+		text: `Fetching rules from GitHub (${org}/${repo})...`,
+		color: "cyan",
+	}).start();
 
 	try {
 		// 1. Ensure destination directory exists
 		if (!fs.existsSync(absoluteDestDir)) {
 			fs.mkdirSync(absoluteDestDir, { recursive: true });
-			console.log(`Created directory: ${absoluteDestDir}`);
+			spinner.info(`Created directory: ${absoluteDestDir}`);
+			spinner.start("Downloading rules...");
 		} else {
-			console.log(`Directory ${absoluteDestDir} already exists.`);
+			spinner.text = "Downloading rules...";
 		}
 
 		// 2. Download all .mdc files recursively from the rules directory
-		console.log(
-			`Fetching rules from GitHub (${org}/${repo})...`,
-		);
-		
-		await downloadDirectory(GITHUB_API_URL, absoluteDestDir);
+		console.log(); // New line for better formatting
+		const stats = await downloadDirectory(GITHUB_API_URL, absoluteDestDir);
 
-		console.log("\n✅ Rules update process finished.");
+		spinner.stop();
+		console.log(); // New line before summary
+
+		// Show summary
+		console.log(chalk.green.bold("✅ Rules download completed!"));
+		console.log();
+		console.log(chalk.cyan(`📊 Summary:`));
+		console.log(`   • Downloaded: ${chalk.green(stats.downloaded)} files`);
+		if (stats.moved > 0) {
+			console.log(
+				`   • Updated: ${chalk.yellow(stats.moved)} files (old versions moved to temp)`,
+			);
+		}
+		if (stats.errors > 0) {
+			console.log(`   • Errors: ${chalk.red(stats.errors)} files`);
+		}
+
+		console.log();
+		console.log(
+			chalk.dim("💡 Tip: To use your own rules repository, create one with a"),
+		);
+		console.log(
+			chalk.dim(
+				`   ${chalk.yellow(".cursor/rules/")} directory containing ${chalk.yellow(".mdc")} rule files,`,
+			),
+		);
+		console.log(
+			chalk.dim(
+				`   along with ${chalk.yellow(".gitignore")} and ${chalk.yellow(".gitkeep")} files as needed.`,
+			),
+		);
 	} catch (error) {
-		console.error("\n❌ An error occurred during the rules download process:");
-		console.error(error.message);
+		spinner.fail("Download failed");
+		console.error(
+			chalk.red("\n❌ An error occurred during the rules download process:"),
+		);
+		console.error(chalk.red(error.message));
+		console.error(chalk.dim("\nPlease check that:"));
+		console.error(chalk.dim("  • The repository exists and is public"));
+		console.error(
+			chalk.dim("  • The repository contains a .cursor/rules/ directory"),
+		);
+		console.error(chalk.dim("  • You have internet connectivity"));
 		process.exit(1);
 	}
 }
+
+// Handle errors gracefully
+process.on("unhandledRejection", (error) => {
+	console.error(chalk.red("\n❌ Unexpected error:"), error.message);
+	process.exit(1);
+});
 
 main();

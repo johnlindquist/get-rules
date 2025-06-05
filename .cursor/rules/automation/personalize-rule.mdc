@@ -1,5 +1,5 @@
 ---
-description: Guide users in personalizing their cursor rules setup
+description:
 globs: 
 alwaysApply: false
 ---
@@ -108,22 +108,6 @@ If the user wants completely custom rules:
    ls -la .cursor/rules/_/
    ```
 
-## Step 4: Document the Personalizations
-
-Create a personal notes file to track changes:
-
-```bash
-cat > .cursor/rules/_/MY_OVERRIDES.md << 'EOF'
-# My Cursor Rules Personalizations
-
-## Modified Team Rules (using --assume-unchanged):
-- [ ] _core/persona.mdc - Made less aggressive
-- [ ] _core/communication.mdc - Added verbose explanations
-
-## Personal Rules Created:
-- [ ] _/my-style.mdc - Personal coding preferences
-- [ ] _/debug-helper.mdc - Custom debugging patterns
-
 ## To Revert:
 ```bash
 git update-index --no-assume-unchanged .cursor/rules/_core/persona.mdc
@@ -131,12 +115,6 @@ git update-index --no-assume-unchanged .cursor/rules/_core/communication.mdc
 ```
 EOF
 ```
-
-## Step 5: Test the Personalizations
-
-1. **Reload the cursor window** or restart cursor to ensure rules are loaded
-2. **Test with a simple request** to verify the behavior changes
-3. **Adjust as needed** based on the results
 
 ## Important Reminders for the User:
 
@@ -159,7 +137,7 @@ git update-index --assume-unchanged .cursor/rules/_core/persona.mdc
 cat > .cursor/rules/_/debug-helper.mdc << 'EOF'
 ---
 description: Personal debugging assistant
-globs: ["**/*.js", "**/*.ts"]
+globs:
 alwaysApply: false
 ---
 # Debug Helper
