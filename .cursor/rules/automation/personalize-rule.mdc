@@ -13,9 +13,8 @@ alwaysApply: false
 
 ### 1. Identify Rule to Personalize
 ```bash
-ls -la .cursor/rules/_core/
-ls -la .cursor/rules/workflows/
-ls -la .cursor/rules/tools/
+# List all rule files (use tree if available, otherwise find)
+tree .cursor/rules -I '_|node_modules' || find .cursor/rules -name "*.mdc" -type f | grep -v "/_/"
 ```
 
 ### 2. Read Current Rule

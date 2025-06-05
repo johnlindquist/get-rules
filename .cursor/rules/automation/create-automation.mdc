@@ -1,0 +1,146 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# Create Automation Rule from Conversation
+
+**DO THIS:** Analyze the conversation so far and extract reusable scripts, tool calls, and workflows into a structured automation rule template.
+
+## Analysis Process
+
+### 1. Scan Conversation for Automation Patterns
+Look for:
+- Repeated command sequences
+- Tool invocations with specific parameters
+- Multi-step workflows that achieved a goal
+- Configuration patterns that could be reused
+- Problem-solving approaches that worked
+
+### 2. Extract Key Components
+
+#### Scripts and Commands
+```bash
+# List all bash commands executed
+# Include their purpose and output expectations
+```
+
+#### Tool Usage Patterns
+- Which tools were called
+- Parameter patterns used
+- Sequencing of tool calls
+- Success/failure patterns
+
+#### Decision Points
+- Conditional logic applied
+- Error handling approaches
+- Fallback strategies used
+
+### 3. Create Automation Template
+
+<template>
+---
+description: [Brief description of what this automation accomplishes]
+globs: [File patterns if applicable, otherwise leave empty]
+alwaysApply: false
+---
+# [Automation Name]
+
+**DO THIS:** [Primary task in one clear sentence]
+
+## Prerequisites
+- [List any required tools, permissions, or setup]
+
+## Workflow
+
+### 1. [First Major Step]
+```bash
+[Commands or code]
+```
+
+### 2. [Second Major Step]
+[Instructions or tool calls]
+
+### 3. [Verification Step]
+```bash
+[Commands to verify success]
+```
+
+## Parameters
+| Parameter | Description | Default | Example |
+|-----------|-------------|---------|---------|
+| [param1]  | [what it does] | [default] | [example] |
+
+## Example Usage
+```
+[Show how to invoke this automation with a simple prompt]
+```
+
+## Notes
+- [Any warnings, limitations, or special considerations]
+- [Alternative approaches if main method fails]
+</template>
+
+### 4. Optimization Checklist
+- [ ] Combine sequential tool calls that can run in parallel
+- [ ] Add error handling for common failure points
+- [ ] Include verification steps after critical operations
+- [ ] Make hardcoded values into parameters
+- [ ] Add cross-platform compatibility where needed
+- [ ] Document expected outputs and success criteria
+
+### 5. Testing Instructions
+1. Save the automation rule to appropriate directory
+2. Test with minimal prompt: "[simple trigger phrase]"
+3. Verify all steps execute correctly
+4. Check that outputs match expectations
+
+## Example Output
+
+When analyzing a conversation about setting up a development environment, you might create:
+
+```markdown
+---
+description: Automated dev environment setup with dependency installation and verification
+globs:
+alwaysApply: false
+---
+# Setup Development Environment
+
+**DO THIS:** Install project dependencies, configure tools, and verify setup.
+
+## Workflow
+
+### 1. Check Prerequisites
+```bash
+node --version || echo "Node.js not installed"
+npm --version || echo "npm not installed"
+```
+
+### 2. Install Dependencies
+```bash
+npm install
+# or pnpm install if pnpm is detected
+```
+
+### 3. Run Initial Build
+```bash
+npm run build
+npm run test
+```
+
+### 4. Verify Setup
+```bash
+npm run lint
+npm run typecheck
+```
+
+## Example Usage
+"Set up my dev environment"
+```
+
+## CRITICAL Reminders
+🚨 **ALWAYS** include error handling for critical steps
+🚨 **NEVER** hardcode paths or user-specific values
+🚨 **DOCUMENT** any assumptions about the environment
+🚨 **TEST** the automation with minimal prompts
