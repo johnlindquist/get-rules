@@ -1,0 +1,8 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# Public Directory
+
+The `public/` directory is used to serve static assets such as images, fonts, and other files that are publicly accessible via the web server. Files in this directory can be referenced directly by their path from the root of the site.

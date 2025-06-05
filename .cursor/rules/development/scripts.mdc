@@ -1,7 +1,7 @@
 ---
 description:
 globs: 
-alwaysApply:
+alwaysApply: false
 ---
 # Create Script with TypeScript and Bun
 

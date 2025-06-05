@@ -1,0 +1,14 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# Key Configuration Files
+
+This project has several important configuration files:
+
+-   **Next.js Configuration**: [`next.config.mjs`](mdc:next.config.mjs) - Manages Next.js specific settings, plugins, and build configurations.
+-   **Tailwind CSS Configuration**: [`tailwind.config.ts`](mdc:tailwind.config.ts) - Defines the Tailwind utility classes, themes, and plugins.
+-   **TypeScript Configuration**: [`tsconfig.json`](mdc:tsconfig.json) - Configures the TypeScript compiler options for the project.
+-   **PostCSS Configuration**: [`postcss.config.mjs`](mdc:postcss.config.mjs) - Configures PostCSS plugins, often used with Tailwind CSS.
+-   **Components Configuration**: [`components.json`](mdc:components.json) - Likely used for managing UI components, possibly for a library like shadcn/ui, defining aliases and component paths.

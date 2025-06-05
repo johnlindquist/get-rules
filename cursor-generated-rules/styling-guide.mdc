@@ -1,0 +1,12 @@
+---
+description: 
+globs: *.css
+alwaysApply: false
+---
+# Styling
+
+This project uses Tailwind CSS for styling. 
+
+-   Global styles can be found in the `styles/` directory.
+-   Tailwind CSS configuration is in [`tailwind.config.ts`](mdc:tailwind.config.ts).
+-   PostCSS configuration is in [`postcss.config.mjs`](mdc:postcss.config.mjs).

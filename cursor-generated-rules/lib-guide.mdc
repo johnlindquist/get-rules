@@ -1,0 +1,8 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Lib Directory
+
+The `lib/` directory is used for utility functions, helper scripts, or other shared library code that doesn't fit into `components/` or `hooks/`.

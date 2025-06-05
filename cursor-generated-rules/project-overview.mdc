@@ -1,0 +1,24 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# Project Overview
+
+This is a Next.js project with the following main directories:
+
+-   `app/`: Contains the core application code, likely using the Next.js App Router.
+-   `components/`: Contains reusable UI components.
+    -   `components/ui/`: Likely contains UI primitives or components from a UI library.
+-   `hooks/`: For custom React hooks.
+-   `lib/`: For utility functions and libraries.
+-   `public/`: For static assets like images and fonts.
+-   `styles/`: For global stylesheets.
+
+Key configuration files include:
+
+-   [`next.config.mjs`](mdc:next.config.mjs)
+-   [`tailwind.config.ts`](mdc:tailwind.config.ts)
+-   [`tsconfig.json`](mdc:tsconfig.json)
+-   [`postcss.config.mjs`](mdc:postcss.config.mjs)
+-   [`components.json`](mdc:components.json) (Potentially for shadcn/ui or similar)

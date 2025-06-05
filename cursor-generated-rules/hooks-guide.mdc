@@ -1,0 +1,8 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# Custom Hooks
+
+Custom React hooks are stored in the `hooks/` directory. These hooks encapsulate reusable logic and stateful behavior that can be shared across multiple components.

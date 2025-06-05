@@ -1,0 +1,12 @@
+---
+description: This is a description
+globs: 
+alwaysApply: false
+---
+# Components
+
+Reusable UI components are located in the `components/` directory.
+
+-   General components are directly within `components/`.
+-   More specific UI primitives or components from a UI library (like shadcn/ui) are likely in `components/ui/`.
+-   [`components.json`](mdc:components.json) might be related to the management or configuration of these UI components, possibly for a library like shadcn/ui.
