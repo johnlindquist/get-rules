@@ -1,7 +1,7 @@
 ---
 description: Terminal command execution guidelines
 globs: 
-alwaysApply: true
+alwaysApply: false
 ---
 # Terminal Command Execution
 

@@ -1,12 +1,7 @@
 ---
-description: Generate multiple parallel task plans for independent development work
-alwaysApply: false
+description:
 globs:
-  - "**/*.md"
-  - "**/*.ts"
-  - "**/*.tsx"
-  - "**/*.js"
-  - "**/*.jsx"
+alwaysApply: false
 ---
 
 # Generate Parallel Task Plans

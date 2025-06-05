@@ -1,5 +1,5 @@
 ---
-description: Audit and manage project dependencies
+description:
 globs:
 alwaysApply: false
 ---

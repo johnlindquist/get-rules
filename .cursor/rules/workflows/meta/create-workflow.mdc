@@ -1,5 +1,5 @@
 ---
-description: Create a new .mdc workflow file by extracting patterns from the current conversation
+description:
 globs:
 alwaysApply: false
 ---

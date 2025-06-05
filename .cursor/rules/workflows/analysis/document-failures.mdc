@@ -1,5 +1,5 @@
 ---
-description: Analyze workflow failures and create prevention rules for future executions
+description:
 globs:
 alwaysApply: false
 ---

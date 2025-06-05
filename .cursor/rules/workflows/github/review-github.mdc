@@ -1,5 +1,5 @@
 ---
-description: Review all pending changes before commit
+description:
 globs:
 alwaysApply: false
 ---

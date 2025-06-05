@@ -1,7 +1,7 @@
 ---
 description: Guidelines for creating executable scripts
 globs: 
-alwaysApply: true
+alwaysApply:
 ---
 # Create Script with TypeScript and Bun
 

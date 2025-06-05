@@ -1,5 +1,5 @@
 ---
-description: Create user environment file to capture developer's system and workflow configuration
+description:
 globs:
 alwaysApply: false
 ---

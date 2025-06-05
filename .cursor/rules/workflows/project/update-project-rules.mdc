@@ -1,5 +1,5 @@
 ---
-description: Update project context file to document workflows and technical configuration
+description:
 globs:
 alwaysApply: false
 ---
