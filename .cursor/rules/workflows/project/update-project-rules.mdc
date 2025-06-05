@@ -63,7 +63,7 @@ Use this template as guide for creating the project.mdc:
 
 <template>
 ---
-description: Project workflow rules and technical configuration
+description:
 globs:
 alwaysApply: true
 ---

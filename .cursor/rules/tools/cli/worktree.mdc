@@ -19,7 +19,7 @@ alwaysApply: false
 
 Usage: `wt [options] [command]`
 
-Description: Manage git worktrees and open them in the Cursor editor.
+description:
 
 ### Options:
   `-V, --version`                       Output the version number

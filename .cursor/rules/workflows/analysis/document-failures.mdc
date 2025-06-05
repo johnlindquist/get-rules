@@ -45,7 +45,7 @@ Look for:
 
 <template>
 ---
-description: Common pitfalls and solutions for [workflow type]
+description:
 globs:
 alwaysApply: false
 ---
@@ -145,7 +145,7 @@ When analyzing a workflow with npm installation failures:
 
 ```markdown
 ---
-description: Common npm installation failures and solutions
+description:
 globs: ["package.json", "*.lock"]
 alwaysApply: false
 ---

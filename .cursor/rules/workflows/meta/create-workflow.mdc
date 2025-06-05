@@ -52,7 +52,7 @@ Create a filename that clearly indicates the workflow's purpose:
 
 ```markdown
 ---
-description: [One-line description of what this workflow does]
+description:
 globs: [Optional: file patterns this workflow applies to, e.g., "*.json", "**/*.ts"]
 alwaysApply: false
 ---

@@ -106,7 +106,7 @@ Create/update the `./cursor/rules/_/<username>.mdc` file with the template below
 
 <template>
 ---
-description: Developer workflow environment for [username]
+description:
 globs:
 alwaysApply: true
 ---
