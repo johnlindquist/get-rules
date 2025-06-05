@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Overview
 
-`get-rules` is an npm utility that downloads and installs `.mdc` rule files for AI-assisted coding tools (like Cursor) from the johnlindquist/get-rules repository. It's a self-contained Node.js CLI tool that fetches rule files via the GitHub API.
+`get-rules` is an npm utility that downloads and installs `.mdc` rule files for AI-assisted coding tools (like Cursor) from the johnlindquist/get-rules repository. It's a self-contained Node.js CLI tool that recursively fetches the entire `.cursor/rules` directory structure via the GitHub API, preserving the hierarchical organization of rules.
 
 ## Common Commands
 
@@ -35,25 +35,38 @@ The project uses semantic-release for automated versioning and publishing:
 
 1. **cli.js**: The core CLI script that:
    - Accepts optional `org/repo` arguments (defaults to `johnlindquist/get-rules`)
-   - Fetches `.mdc` files from GitHub API
-   - Downloads files to `.cursor/rules/` in the current working directory
+   - Recursively downloads entire `.cursor/rules` directory structure from GitHub
+   - Downloads only `.mdc` files while preserving directory hierarchy
    - Moves existing files to temp directory before downloading updates
 
 ### Rule System Architecture
 
 The downloaded rules follow a specific structure documented in `RULES.md`:
 - Rules are `.mdc` files (Markdown with Components) with YAML frontmatter
-- Organized in category directories (cli/, docs/, git/, task/, etc.)
+- Organized in hierarchical category directories:
+  - `_/` - Personal rules directory (gitignored)
+  - `_always/` - Global rules that apply to all operations
+  - `_globs/` - Rules organized by file patterns they apply to
+  - Category directories: `cli/`, `docs/`, `git/`, `task/`, `code/`, `react/`, etc.
 - Each rule has `alwaysApply` boolean to control automatic vs manual invocation
-- Only `_global/_global.mdc` has `alwaysApply: true`
+- Frontmatter fields include: `description`, `globs`, `alwaysApply`
 
 ### Key Implementation Details
 
 - Uses native Node.js `https` module (no external HTTP dependencies)
 - Implements custom `httpsGetJson()` and `downloadFile()` helpers
-- Preserves existing files by moving them to temp directory
-- Creates `.cursor/rules` directory structure if it doesn't exist
+- New `downloadDirectory()` function for recursive directory traversal
+- Preserves existing files by moving them to OS temp directory with timestamp
+- Creates nested directory structure automatically
 - User-Agent header included for GitHub API compliance
+- Handles both files and directories from GitHub API responses
+
+## Customization & Personalization
+
+The downloaded rules support customization as documented in `PERSONALIZATION.md`:
+- `_/` directory for personal rules (gitignored, not shared with team)
+- Local overrides using `git update-index --assume-unchanged` for team rules
+- `_globs/` directory contains rules organized by file patterns
 
 ## Release Process
 
