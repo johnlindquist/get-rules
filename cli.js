@@ -91,6 +91,52 @@ function downloadFile(fileUrl, destinationPath) {
 	});
 }
 
+// Recursive function to download all files from a directory
+async function downloadDirectory(apiUrl, localPath, basePath = "") {
+	try {
+		const contents = await httpsGetJson(apiUrl);
+		
+		if (!Array.isArray(contents)) {
+			console.error(`Error: Expected array from ${apiUrl}, got:`, contents);
+			return;
+		}
+
+		for (const item of contents) {
+			const itemPath = basePath ? `${basePath}/${item.name}` : item.name;
+			const localItemPath = path.join(localPath, item.name);
+
+			if (item.type === "dir") {
+				// Create directory locally
+				if (!fs.existsSync(localItemPath)) {
+					fs.mkdirSync(localItemPath, { recursive: true });
+					console.log(`  - Created directory: ${itemPath}`);
+				}
+				// Recursively download directory contents
+				await downloadDirectory(item.url, localItemPath, itemPath);
+			} else if (item.type === "file" && item.name.endsWith(".mdc")) {
+				// Download .mdc files
+				if (item.download_url) {
+					if (fs.existsSync(localItemPath)) {
+						// Move existing file to temp
+						const tempDir = os.tmpdir();
+						const tempFilePath = path.join(tempDir, `${item.name}.${Date.now()}`);
+						fs.renameSync(localItemPath, tempFilePath);
+						console.log(`  - ${itemPath} existed, moved to temp: ${tempFilePath}`);
+					}
+					console.log(`  - Downloading ${itemPath}...`);
+					try {
+						await downloadFile(item.download_url, localItemPath);
+					} catch (downloadError) {
+						console.error(`    Failed to download ${itemPath}: ${downloadError.message}`);
+					}
+				}
+			}
+		}
+	} catch (error) {
+		console.error(`Error processing directory ${apiUrl}: ${error.message}`);
+	}
+}
+
 async function main() {
 	const absoluteDestDir = path.resolve(process.cwd(), DEST_DIR_NAME);
 	console.log(`Attempting to install rules to ${absoluteDestDir}`);
@@ -104,68 +150,13 @@ async function main() {
 			console.log(`Directory ${absoluteDestDir} already exists.`);
 		}
 
-		// 2. Fetch file list from GitHub API
+		// 2. Download all .mdc files recursively from the rules directory
 		console.log(
-			"Fetching rule file list from GitHub (johnlindquist/get-rules)...",
+			`Fetching rules from GitHub (${org}/${repo})...`,
 		);
-		const repoContents = await httpsGetJson(GITHUB_API_URL);
+		
+		await downloadDirectory(GITHUB_API_URL, absoluteDestDir);
 
-		if (!Array.isArray(repoContents)) {
-			console.error(
-				"Error: GitHub API did not return an array of files. Response:",
-				repoContents,
-			);
-			process.exit(1);
-		}
-
-		const mdcFiles = repoContents.filter(
-			(item) => item.type === "file" && item.name && item.name.endsWith(".mdc"),
-		);
-
-		if (mdcFiles.length === 0) {
-			console.log("No .mdc files found in the repository's root.");
-			process.exit(0);
-		}
-
-		console.log(`Found ${mdcFiles.length} .mdc rule file(s).`);
-
-		// 3. Download each .mdc file
-		let updatedCount = 0;
-
-		for (const fileItem of mdcFiles) {
-			const fileName = fileItem.name;
-			const destFilePath = path.join(absoluteDestDir, fileName);
-			const remoteFileUrl = fileItem.download_url;
-
-			if (!remoteFileUrl) {
-				console.warn(
-					`  - Skipping ${fileName}: no download_url found (this is unexpected for a file).`,
-				);
-				continue;
-			}
-
-			if (fs.existsSync(destFilePath)) {
-				// Move the existing file to a temp directory
-				const tempDir = os.tmpdir();
-				const tempFilePath = path.join(tempDir, `${fileName}.${Date.now()}`);
-				fs.renameSync(destFilePath, tempFilePath);
-				console.log(`  - ${fileName} existed, moved to temp: ${tempFilePath}`);
-			}
-			console.log(`  - Downloading ${fileName}...`);
-			try {
-				await downloadFile(remoteFileUrl, destFilePath);
-				updatedCount++;
-			} catch (downloadError) {
-				console.error(
-					`    Failed to download ${fileName}: ${downloadError.message}`,
-				);
-			}
-		}
-
-		console.log("\n--- Summary ---");
-		console.log(`Updated:    ${updatedCount} file(s)`);
-		console.log(`Total .mdc files processed: ${mdcFiles.length}`);
-		console.log(`All rules should now be in ${absoluteDestDir}`);
 		console.log("\n✅ Rules update process finished.");
 	} catch (error) {
 		console.error("\n❌ An error occurred during the rules download process:");
