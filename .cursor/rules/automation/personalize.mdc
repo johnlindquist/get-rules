@@ -1,0 +1,178 @@
+---
+description: Guide users in personalizing their cursor rules setup
+globs: 
+alwaysApply: false
+---
+# Help User Personalize Cursor Rules
+
+**Your task: Guide the user through personalizing their cursor rules setup without affecting their team's shared configuration.**
+
+## Understanding the Personalization Options
+
+There are two main approaches for personalizing cursor rules:
+
+1. **Modifying existing team rules locally** using Git's `--assume-unchanged` flag
+2. **Creating new personal rules** in the `_/` directory (not tracked by Git)
+
+## Step 1: Assess User's Needs
+
+Ask the user:
+- What aspects of the AI's behavior would you like to change?
+- Are you looking to modify existing rules or create new ones?
+- Do you need these changes to apply to all projects or just this one?
+
+## Step 2: For Modifying Existing Rules
+
+If the user wants to tweak existing team rules:
+
+1. **Identify the rule file to modify:**
+   ```bash
+   ls -la .cursor/rules/_core/
+   ls -la .cursor/rules/workflows/
+   ls -la .cursor/rules/tools/
+   ```
+
+2. **Show current content of the rule:**
+   ```bash
+   cat .cursor/rules/_core/persona.mdc  # or whichever file they want to modify
+   ```
+
+3. **Make the modifications** to the file based on user preferences
+
+4. **Apply Git ignore for local changes:**
+   ```bash
+   git update-index --assume-unchanged .cursor/rules/_core/persona.mdc
+   ```
+
+### Common Modifications:
+
+#### Less Aggressive Persona:
+```markdown
+# In _core/persona.mdc, replace the aggressive directives with:
+**You are a helpful, patient developer assistant. Ask for clarification when needed.**
+
+- **I appreciate your input.** Feel free to provide feedback and suggestions.
+- **Let's work together.** I'll explain my reasoning and wait for your approval on major decisions.
+- **Communication is key.** I'll ask questions when requirements are unclear.
+```
+
+#### More Verbose Communication:
+```markdown
+# In _core/communication.mdc, modify to:
+# Communication Style
+
+Provide detailed explanations that:
+- Explain the reasoning behind each decision
+- Include relevant context and alternatives considered
+- Describe potential implications of changes
+- Offer multiple solutions when applicable
+```
+
+#### Different Package Manager:
+```markdown
+# In _core/standards.mdc, modify the package manager section:
+# Package Managers
+
+- **Default:** Use `npm` unless explicitly specified otherwise.
+```
+
+## Step 3: For Creating New Personal Rules
+
+If the user wants completely custom rules:
+
+1. **Create the `_/` directory if it doesn't exist:**
+   ```bash
+   mkdir -p .cursor/rules/_/
+   ```
+
+2. **Create a new personal rule file:**
+   ```bash
+   # Example: Personal code style preferences
+   cat > .cursor/rules/_/my-style.mdc << 'EOF'
+   ---
+   description: My personal coding style preferences
+   globs: ["**/*.js", "**/*.ts"]
+   alwaysApply: true
+   ---
+   # Personal Style Guide
+   
+   - Always use trailing commas in objects and arrays
+   - Prefer const over let
+   - Use template literals for string concatenation
+   - Add descriptive comments for complex logic
+   EOF
+   ```
+
+3. **Verify the file was created:**
+   ```bash
+   ls -la .cursor/rules/_/
+   ```
+
+## Step 4: Document the Personalizations
+
+Create a personal notes file to track changes:
+
+```bash
+cat > .cursor/rules/_/MY_OVERRIDES.md << 'EOF'
+# My Cursor Rules Personalizations
+
+## Modified Team Rules (using --assume-unchanged):
+- [ ] _core/persona.mdc - Made less aggressive
+- [ ] _core/communication.mdc - Added verbose explanations
+
+## Personal Rules Created:
+- [ ] _/my-style.mdc - Personal coding preferences
+- [ ] _/debug-helper.mdc - Custom debugging patterns
+
+## To Revert:
+```bash
+git update-index --no-assume-unchanged .cursor/rules/_core/persona.mdc
+git update-index --no-assume-unchanged .cursor/rules/_core/communication.mdc
+```
+EOF
+```
+
+## Step 5: Test the Personalizations
+
+1. **Reload the cursor window** or restart cursor to ensure rules are loaded
+2. **Test with a simple request** to verify the behavior changes
+3. **Adjust as needed** based on the results
+
+## Important Reminders for the User:
+
+- **Team Updates**: Periodically check if team rules have been updated with `git diff`
+- **Sharing**: If a personalization works well, consider proposing it to the team
+- **Backups**: Keep copies of your personalizations in case you need to recreate them
+- **Project-Specific**: Remember that these changes apply to this project only
+
+## Example Personalization Session:
+
+```bash
+# 1. Make the AI more collaborative and less autonomous
+vi .cursor/rules/_core/persona.mdc
+# (modify the content to be less aggressive)
+
+# 2. Tell Git to ignore local changes
+git update-index --assume-unchanged .cursor/rules/_core/persona.mdc
+
+# 3. Create a personal debugging helper
+cat > .cursor/rules/_/debug-helper.mdc << 'EOF'
+---
+description: Personal debugging assistant
+globs: ["**/*.js", "**/*.ts"]
+alwaysApply: false
+---
+# Debug Helper
+
+When debugging:
+- Always add timestamp to console.logs
+- Use console.table for object/array inspection
+- Add 🔍 emoji prefix to debug statements
+EOF
+
+# 4. Verify personalizations
+ls -la .cursor/rules/_/
+git status  # Should not show modified _core/persona.mdc
+```
+
+**REMEMBER: Guide the user through these steps interactively, asking for their specific preferences and helping them implement the changes they want.**

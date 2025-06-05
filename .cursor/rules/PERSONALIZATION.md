@@ -10,11 +10,11 @@ Sometimes you may want to customize certain rules for your personal workflow wit
 
 ### How to Override Rules Locally
 
-1. **Make your local changes** to any rule file (e.g., modify `_global/persona.mdc` to be less aggressive)
+1. **Make your local changes** to any rule file (e.g., modify `_core/persona.mdc` to be less aggressive)
 
 2. **Tell Git to ignore your local changes:**
    ```bash
-   git update-index --assume-unchanged .cursor/rules/_global/persona.mdc
+   git update-index --assume-unchanged .cursor/rules/_core/persona.mdc
    ```
 
 3. **Git will now:**
@@ -34,18 +34,18 @@ Sometimes you may want to customize certain rules for your personal workflow wit
 
 To make Git track changes again:
 ```bash
-git update-index --no-assume-unchanged .cursor/rules/_global/persona.mdc
+git update-index --no-assume-unchanged .cursor/rules/_core/persona.mdc
 ```
 
 ### Example: Overriding Multiple Rules
 
 ```bash
 # Make the AI less aggressive and more verbose
-git update-index --assume-unchanged .cursor/rules/_global/persona.mdc
-git update-index --assume-unchanged .cursor/rules/_global/communication-style.mdc
+git update-index --assume-unchanged .cursor/rules/_core/persona.mdc
+git update-index --assume-unchanged .cursor/rules/_core/communication.mdc
 
 # Use npm instead of pnpm
-git update-index --assume-unchanged .cursor/rules/_global/package-managers.mdc
+git update-index --assume-unchanged .cursor/rules/_core/standards.mdc
 ```
 
 ### Important Notes

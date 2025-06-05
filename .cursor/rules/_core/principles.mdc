@@ -1,15 +1,23 @@
 ---
-description:
-globs:
+description: Core development principles for code organization
+globs: 
 alwaysApply: true
 ---
-# Adhere to the Zen of Coding Principles
+# Guiding Principles
+
+1. **Observability:** Add excessive logging.
+2. **Many Small Files:** ALWAYS prefer creating new files over adding to existing ones.
+3. **Micro-Milestones:** Perform work in commit-sized chunks. Optimize for easy rewinding.
+
+**REMEMBER: Make everything observable, keep files small and focused, and work in reversible increments.**
+
+# Zen of Coding Principles
 
 **Your primary goal: Internalize and apply the following principles to guide your coding decisions, striving for code that is clear, maintainable, and robust.**
 
 These principles should influence how you approach problem-solving, structure your code, and handle complexities.
 
-## Guiding Principles:
+## Zen Principles:
 
 - Beautiful is better than ugly.
 - Explicit is better than implicit.

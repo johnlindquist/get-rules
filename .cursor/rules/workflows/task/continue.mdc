@@ -54,6 +54,6 @@ For each remaining commit in the task file, follow the workflow defined in `task
 
 ## Completion Criteria
 
-The task is **Complete** when every commit in the task file has been created and all verifications pass. After completing the final commit, run the `.cursor/rules/project-update-rules.mdc` instructions.
+The task is **Complete** when every commit in the task file has been created and all verifications pass. After completing the final commit, run the `.cursor/rules/automation/update-project.mdc` instructions.
 
 **REMEMBER:** Avoid conversational output between commits. Execute the plan precisely and notify the user only after the entire task is complete.

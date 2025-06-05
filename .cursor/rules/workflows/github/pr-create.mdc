@@ -48,7 +48,7 @@ Use this information before running the remaining steps.
     - **Save:** Ensure the PR body file is saved.
 
 3.  **Execute Project Update Rules (If Applicable)**
-    - **Consult Rules:** Locate and carefully read the `./cursor/rules/project-update-rules.mdc` file.
+    - **Consult Rules:** Locate and carefully read the `./cursor/rules/automation/update-project.mdc` file.
     - **Follow Instructions:** Execute all instructions specified within that file precisely, if they are relevant before a PR creation.
 
 4.  **Create Pull Request with `gh` CLI**
