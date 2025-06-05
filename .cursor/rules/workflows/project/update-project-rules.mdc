@@ -1,11 +1,11 @@
 ---
-description:
+description: Update project context file to document workflows and technical configuration
 globs:
 alwaysApply: false
 ---
-# Update Project Context File: .cursor/rules/_context/project.mdc 
+# Update Project Workflow Context File: .cursor/rules/_context/project.mdc 
 
-**Your primary task: Meticulously update the `./cursor/rules/_context/project.mdc` file. Use ONLY information found within the current project's files and documentation.**
+**Your primary task: Meticulously update the `./cursor/rules/_context/project.mdc` file to document project workflows. Use ONLY information found within the current project's files and documentation.**
 
 ## File Existence Check
 
@@ -19,7 +19,7 @@ Use the output to see which files are available to read.
 
 ## 1. Core Objective
 
-Your goal is to populate the `./cursor/rules/_context/project.mdc` file. This file must accurately reflect the project's current configuration, technology stack, structure, standards, and tooling, serving as a central project reference.
+Your goal is to populate the `./cursor/rules/_context/project.mdc` file. This file must accurately reflect the project's current configuration, technology stack, structure, standards, workflows, and tooling, serving as a central project reference.
 
 ## 2. Information Gathering (Strictly from Project Sources)
 
@@ -63,12 +63,12 @@ Use this template as guide for creating the project.mdc:
 
 <template>
 ---
-description:
+description: Project workflow rules and technical configuration
 globs:
 alwaysApply: true
 ---
 
-# [Project Name] - Project Rules
+# [Project Name] - Project Workflow Rules
 
 ## 1. Project Overview
 

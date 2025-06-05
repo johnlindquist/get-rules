@@ -1,11 +1,11 @@
 ---
-description:
+description: Personalize existing workflow rules locally without committing changes
 globs: 
 alwaysApply: false
 ---
-# Personalize Existing Cursor Rules Locally
+# Personalize Existing Workflow Rules Locally
 
-**DO THIS:** Help user modify team rules locally without committing changes.
+**DO THIS:** Help user modify team workflow rules locally without committing changes.
 
 **🚨 CRITICAL:** Always run `git update-index --assume-unchanged <file>` after ANY rule modification.
 
@@ -38,7 +38,7 @@ git status  # Should NOT show modified files
 
 ## Common Personalizations
 
-### Less Aggressive Persona
+### Less Aggressive Workflow Execution
 Replace in `_core/persona.mdc`:
 ```markdown
 **You are a helpful, patient developer assistant.**
@@ -47,7 +47,7 @@ Replace in `_core/persona.mdc`:
 - Wait for approval on destructive operations
 ```
 
-### More Verbose Communication
+### More Verbose Workflow Communication
 Replace in `_core/communication.mdc`:
 ```markdown
 # Communication Style
@@ -56,7 +56,7 @@ Replace in `_core/communication.mdc`:
 - Describe implications of changes
 ```
 
-### Different Package Manager
+### Different Package Manager in Workflows
 Replace in `_core/standards.mdc`:
 ```markdown
 # Package Managers
@@ -82,4 +82,4 @@ git update-index --assume-unchanged .cursor/rules/_core/persona.mdc
 git status  # Should NOT show persona.mdc
 ```
 
-**REMEMBER:** Always run `git update-index --assume-unchanged` after EVERY rule modification!
+**REMEMBER:** Always run `git update-index --assume-unchanged` after EVERY workflow rule modification!

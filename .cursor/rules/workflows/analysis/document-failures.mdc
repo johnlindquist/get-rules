@@ -1,11 +1,11 @@
 ---
-description:
+description: Analyze workflow failures and create prevention rules for future executions
 globs:
 alwaysApply: false
 ---
-# Document Failures and Create Prevention Rule
+# Document Workflow Failures and Create Prevention Rule
 
-**DO THIS:** Analyze the conversation for failures, errors, and unsuccessful approaches, then create a rule to prevent these issues in future conversations.
+**DO THIS:** Analyze the conversation for failures, errors, and unsuccessful approaches, then create a rule to prevent these issues in future workflows.
 
 ## Failure Analysis Process
 
@@ -13,7 +13,7 @@ alwaysApply: false
 Look for:
 - Commands that returned errors
 - Tool calls that failed or produced unexpected results
-- Approaches that were abandoned
+- Workflows that were abandoned
 - Misconceptions or incorrect assumptions
 - Performance issues or timeouts
 - Missing prerequisites or dependencies
@@ -35,7 +35,7 @@ Look for:
 - Missing required context before tool use
 - Sequencing errors in tool calls
 
-#### Logic/Approach Failures
+#### Workflow Logic Failures
 - Incorrect assumptions about the codebase
 - Wrong problem-solving approach
 - Missing edge cases
@@ -45,13 +45,13 @@ Look for:
 
 <template>
 ---
-description: Common pitfalls and solutions for [task type]
+description: Common pitfalls and solutions for [workflow type]
 globs:
 alwaysApply: false
 ---
-# Avoid [Category] Failures
+# Avoid [Category] Workflow Failures
 
-**DO THIS:** Check for these common issues before attempting [task type].
+**DO THIS:** Check for these common issues before attempting [workflow type].
 
 ## Pre-flight Checklist
 - [ ] [Prerequisite check 1]
@@ -91,7 +91,7 @@ alwaysApply: false
 
 ## Prevention Strategies
 
-### Before Starting
+### Before Starting Workflow
 1. **Verify Environment**
    ```bash
    [Verification commands]
@@ -102,7 +102,7 @@ alwaysApply: false
    [Dependency checks]
    ```
 
-### During Execution
+### During Workflow Execution
 - [Strategy 1]
 - [Strategy 2]
 - [Strategy 3]
@@ -141,7 +141,7 @@ If you encounter these issues:
 
 ### 5. Example Output
 
-When analyzing a conversation with npm installation failures:
+When analyzing a workflow with npm installation failures:
 
 ```markdown
 ---
@@ -149,7 +149,7 @@ description: Common npm installation failures and solutions
 globs: ["package.json", "*.lock"]
 alwaysApply: false
 ---
-# Avoid NPM Installation Failures
+# Avoid NPM Installation Workflow Failures
 
 **DO THIS:** Check for these issues before running npm commands.
 

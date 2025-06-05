@@ -1,11 +1,11 @@
 ---
-description:
+description: Practical prompt patterns to create effective workflows with AI agents
 globs:
 alwaysApply: false
 ---
-# Improve the User's Prompt Following the Patterns Below
+# Improve Workflow Prompts Following the Patterns Below
 
-> Practical prompt patterns to help anyone get clearer, more reliable answers from an AI agent.
+> Practical prompt patterns to help anyone create clearer, more reliable workflows with AI agents.
 
 | # | Pattern                       | Why It Matters                                                          | Template                                                                 | Example Prompt                                                                                             |
 |---|-------------------------------|-------------------------------------------------------------------------|--------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------|

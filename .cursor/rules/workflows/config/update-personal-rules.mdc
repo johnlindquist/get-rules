@@ -1,11 +1,11 @@
 ---
-description:
+description: Create user environment file to capture developer's system and workflow configuration
 globs:
 alwaysApply: false
 ---
 # Create User Environment File: .cursor/rules/_/<username>.mdc
 
-**Your primary task: Create a user environment file that captures the developer's system configuration and available tools.**
+**Your primary task: Create a user environment file that captures the developer's system configuration and available tools for workflows.**
 
 ## Capture System Environment
 
@@ -106,12 +106,12 @@ Create/update the `./cursor/rules/_/<username>.mdc` file with the template below
 
 <template>
 ---
-description: Developer environment for [username]
+description: Developer workflow environment for [username]
 globs:
 alwaysApply: true
 ---
 
-# Developer Environment: [username]
+# Developer Workflow Environment: [username]
 
 ## System Information
 
@@ -184,7 +184,7 @@ Based on availability: [npm/pnpm/yarn/bun]
 - Shell: [bash/zsh/fish/powershell]
 - Config file: [.bashrc/.zshrc/.config/fish/config.fish]
 
-## Development Preferences
+## Workflow Preferences
 
 ### Command Shortcuts
 ```bash
@@ -203,13 +203,13 @@ Based on availability: [npm/pnpm/yarn/bun]
 [gh pr create or git push]
 ```
 
-### Environment-Specific Recommendations
+### Environment-Specific Workflow Recommendations
 - Use [detected package manager] for JavaScript projects
 - Use [detected Python tool] for Python environments
 - Editor: [VS Code/Cursor/Neovim] detected and recommended
 - Terminal multiplexer: [tmux/zellij] available
 
-## Personal Development Notes
+## Personal Workflow Notes
 [Space for user to add their own notes]
 - Preferred workflows
 - Custom aliases
@@ -217,7 +217,7 @@ Based on availability: [npm/pnpm/yarn/bun]
 </template>
 
 **IMPORTANT:** 
-- This file captures YOUR development environment
+- This file captures YOUR workflow environment
 - Update it when you install new tools or change systems
 - Use it to inform AI assistants about your available tools
 - Keep it in the `_/` directory so it's personal to you

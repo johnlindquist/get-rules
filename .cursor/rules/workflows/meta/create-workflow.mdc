@@ -1,15 +1,15 @@
 ---
-description:
+description: Analyze conversation and extract reusable workflows into structured rule templates
 globs:
 alwaysApply: false
 ---
-# Create Automation Rule from Conversation
+# Create Workflow Rule from Conversation
 
-**DO THIS:** Analyze the conversation so far and extract reusable scripts, tool calls, and workflows into a structured automation rule template.
+**DO THIS:** Analyze the conversation so far and extract reusable scripts, tool calls, and workflows into a structured workflow rule template.
 
 ## Analysis Process
 
-### 1. Scan Conversation for Automation Patterns
+### 1. Scan Conversation for Workflow Patterns
 Look for:
 - Repeated command sequences
 - Tool invocations with specific parameters
@@ -36,15 +36,15 @@ Look for:
 - Error handling approaches
 - Fallback strategies used
 
-### 3. Create Automation Template
+### 3. Create Workflow Template
 
 <template>
 ---
-description: [Brief description of what this automation accomplishes]
+description: [Brief description of what this workflow accomplishes]
 globs: [File patterns if applicable, otherwise leave empty]
 alwaysApply: false
 ---
-# [Automation Name]
+# [Workflow Name]
 
 **DO THIS:** [Primary task in one clear sentence]
 
@@ -73,7 +73,7 @@ alwaysApply: false
 
 ## Example Usage
 ```
-[Show how to invoke this automation with a simple prompt]
+[Show how to invoke this workflow with a simple prompt]
 ```
 
 ## Notes
@@ -90,7 +90,7 @@ alwaysApply: false
 - [ ] Document expected outputs and success criteria
 
 ### 5. Testing Instructions
-1. Save the automation rule to appropriate directory
+1. Save the workflow rule to appropriate directory
 2. Test with minimal prompt: "[simple trigger phrase]"
 3. Verify all steps execute correctly
 4. Check that outputs match expectations
@@ -143,4 +143,4 @@ npm run typecheck
 🚨 **ALWAYS** include error handling for critical steps
 🚨 **NEVER** hardcode paths or user-specific values
 🚨 **DOCUMENT** any assumptions about the environment
-🚨 **TEST** the automation with minimal prompts
+🚨 **TEST** the workflow with minimal prompts
