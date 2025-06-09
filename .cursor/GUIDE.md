@@ -1,8 +1,4 @@
-Of course. This is an excellent set of rules that defines a comprehensive and opinionated development methodology. Here is a document that outlines the scenarios, user stories, and operational flows for using these rules.
-
-***
-
-# A Developer's Guide to the Cursor AI Workflow Rules
+# Rules and Workflows
 
 ## Introduction
 
