@@ -6,7 +6,51 @@ on:
       - main
 
 jobs:
+  smoke-test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: 20
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 10
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: pnpm
+      - name: Install dependencies
+        run: pnpm install
+      - name: Run smoke test - Default repository
+        run: |
+          # Test with default repository (should download without errors)
+          timeout 60s node cli.js johnlindquist/get-rules || exit 1
+          # Verify some files were downloaded
+          if [ ! -d ".cursor/rules" ]; then
+            echo "Error: .cursor/rules directory not created"
+            exit 1
+          fi
+          if [ -z "$(find .cursor/rules -name '*.mdc' -type f)" ]; then
+            echo "Error: No .mdc files downloaded"
+            exit 1
+          fi
+      - name: Clean up test files
+        run: rm -rf .cursor
+      - name: Run smoke test - Invalid repository
+        run: |
+          # Test with invalid repository (should fail gracefully)
+          ! timeout 30s node cli.js invalid/nonexistent-repo 2>&1 | grep -q "An error occurred"
+      - name: Run smoke test - Help flag
+        run: |
+          # Test with help flag (should show usage)
+          node cli.js --help 2>&1 | grep -q "Invalid argument"
+
   release:
+    needs: smoke-test
     runs-on: ubuntu-latest
     permissions:
       contents: write

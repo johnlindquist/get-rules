@@ -5,7 +5,6 @@ const fs = require("fs");
 const path = require("path");
 const os = require("os");
 const chalk = require("chalk");
-const ora = require("ora").default || require("ora");
 const prompts = require("prompts");
 
 const DEFAULT_ORG = "johnlindquist";
@@ -179,6 +178,9 @@ async function downloadDirectory(
 }
 
 async function main() {
+	// Dynamically import ora (ESM module)
+	const { default: ora } = await import("ora");
+	
 	let org, repo;
 
 	// Check if argument was provided
