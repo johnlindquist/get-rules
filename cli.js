@@ -1,15 +1,15 @@
 #!/usr/bin/env node
 
-const https = require("https");
-const fs = require("fs");
-const path = require("path");
-const os = require("os");
+const https = require("node:https");
+const fs = require("node:fs");
+const path = require("node:path");
+const os = require("node:os");
 const chalk = require("chalk");
 const prompts = require("prompts");
 
 const DEFAULT_ORG = "johnlindquist";
 const DEFAULT_REPO = "get-rules";
-const RULES_PATH = ".cursor/rules";
+const CURSOR_PATH = ".cursor";
 
 // Display welcome message and instructions
 function displayWelcome() {
@@ -17,10 +17,12 @@ function displayWelcome() {
 	console.log(chalk.cyan.bold("🚀 Welcome to get-rules!"));
 	console.log(chalk.gray("═".repeat(60)));
 	console.log();
-	console.log("This tool downloads Cursor AI rules from a GitHub repository.");
-	console.log(`Rules will be downloaded to: ${chalk.yellow(".cursor/rules/")}`);
 	console.log(
-		chalk.dim("Downloads: .mdc rule files, .gitignore, and .gitkeep files"),
+		"This tool downloads the .cursor directory from a GitHub repository.",
+	);
+	console.log(`Files will be downloaded to: ${chalk.yellow(".cursor/")}`);
+	console.log(
+		chalk.dim("All files inside the .cursor directory will be downloaded."),
 	);
 	console.log();
 	console.log(chalk.dim("You can:"));
@@ -57,7 +59,9 @@ function httpsGetJson(url) {
 					);
 				}
 				let rawData = "";
-				res.on("data", (chunk) => (rawData += chunk));
+				res.on("data", (chunk) => {
+					rawData += chunk;
+				});
 				res.on("end", () => {
 					try {
 						resolve(JSON.parse(rawData));
@@ -133,14 +137,8 @@ async function downloadDirectory(
 				}
 				// Recursively download directory contents
 				await downloadDirectory(item.url, localItemPath, itemPath, stats);
-			} else if (
-				item.type === "file" &&
-				(item.name.endsWith(".mdc") ||
-					item.name.endsWith(".md") ||
-					item.name === ".gitignore" ||
-					item.name === ".gitkeep")
-			) {
-				// Download .mdc, .gitignore, and .gitkeep files
+			} else if (item.type === "file") {
+				// Download any file now
 				if (item.download_url) {
 					if (fs.existsSync(localItemPath)) {
 						// Move existing file to temp
@@ -180,8 +178,9 @@ async function downloadDirectory(
 async function main() {
 	// Dynamically import ora (ESM module)
 	const { default: ora } = await import("ora");
-	
-	let org, repo;
+
+	let org;
+	let repo;
 
 	// Check if argument was provided
 	const userArg = process.argv[2];
@@ -207,7 +206,7 @@ async function main() {
 		const response = await prompts({
 			type: "text",
 			name: "repository",
-			message: `Enter GitHub repository`,
+			message: "Enter GitHub repository",
 			initial: `${DEFAULT_ORG}/${DEFAULT_REPO}`,
 			validate: (value) =>
 				/^[^/]+\/[^/]+$/.test(value) || "Invalid format. Expected: org/repo",
@@ -223,11 +222,11 @@ async function main() {
 	}
 
 	// Construct the API URL with the selected repo
-	const GITHUB_API_URL = `https://api.github.com/repos/${org}/${repo}/contents/${RULES_PATH}`;
-	const absoluteDestDir = path.resolve(process.cwd(), RULES_PATH);
+	const GITHUB_API_URL = `https://api.github.com/repos/${org}/${repo}/contents/${CURSOR_PATH}`;
+	const absoluteDestDir = path.resolve(process.cwd(), CURSOR_PATH);
 
 	console.log(
-		chalk.dim(`\n📁 Rules will be downloaded to: ${absoluteDestDir}`),
+		chalk.dim(`\n📁 Files will be downloaded to: ${absoluteDestDir}`),
 	);
 	console.log(chalk.gray("─".repeat(60)));
 
@@ -254,13 +253,15 @@ async function main() {
 		console.log(); // New line before summary
 
 		// Show summary
-		console.log(chalk.green.bold("✅ Rules download completed!"));
+		console.log(chalk.green.bold("✅ Download completed!"));
 		console.log();
-		console.log(chalk.cyan(`📊 Summary:`));
+		console.log(chalk.cyan("📊 Summary:"));
 		console.log(`   • Downloaded: ${chalk.green(stats.downloaded)} files`);
 		if (stats.moved > 0) {
 			console.log(
-				`   • Updated: ${chalk.yellow(stats.moved)} files (old versions moved to temp)`,
+				`   • Updated: ${chalk.yellow(
+					stats.moved,
+				)} files (old versions moved to temp)`,
 			);
 		}
 		if (stats.errors > 0) {
@@ -269,28 +270,21 @@ async function main() {
 
 		console.log();
 		console.log(
-			chalk.dim("💡 Tip: To use your own rules repository, create one with a"),
+			chalk.dim("💡 Tip: To use your own repository, create one with a"),
 		);
 		console.log(
-			chalk.dim(
-				`   ${chalk.yellow(".cursor/rules/")} directory containing ${chalk.yellow(".mdc")} rule files,`,
-			),
-		);
-		console.log(
-			chalk.dim(
-				`   along with ${chalk.yellow(".gitignore")} and ${chalk.yellow(".gitkeep")} files as needed.`,
-			),
+			chalk.dim(`   ${chalk.yellow(".cursor/")} directory at its root.`),
 		);
 	} catch (error) {
 		spinner.fail("Download failed");
 		console.error(
-			chalk.red("\n❌ An error occurred during the rules download process:"),
+			chalk.red("\n❌ An error occurred during the download process:"),
 		);
 		console.error(chalk.red(error.message));
 		console.error(chalk.dim("\nPlease check that:"));
 		console.error(chalk.dim("  • The repository exists and is public"));
 		console.error(
-			chalk.dim("  • The repository contains a .cursor/rules/ directory"),
+			chalk.dim("  • The repository contains a .cursor/ directory"),
 		);
 		console.error(chalk.dim("  • You have internet connectivity"));
 		process.exit(1);

@@ -1,8 +1,3 @@
----
-description:
-globs:
-alwaysApply: false
----
 # Create Executable TypeScript Scripts with Bun
 
 **Your task: Create new, executable TypeScript scripts within a `scripts` directory, runnable with `bun`.**

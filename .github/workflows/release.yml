@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  smoke-test:
+  smoke-test-default:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -37,17 +37,51 @@ jobs:
           fi
       - name: Clean up test files
         run: rm -rf .cursor
+
+  smoke-test-invalid:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 10
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+      - name: Install dependencies
+        run: pnpm install
       - name: Run smoke test - Invalid repository
         run: |
           # Test with invalid repository (should fail gracefully)
           ! timeout 30s node cli.js invalid/nonexistent-repo 2>&1 | grep -q "An error occurred"
+
+  smoke-test-help:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 10
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+      - name: Install dependencies
+        run: pnpm install
       - name: Run smoke test - Help flag
         run: |
           # Test with help flag (should show usage)
           node cli.js --help 2>&1 | grep -q "Invalid argument"
 
   release:
-    needs: smoke-test
+    needs: [smoke-test-default, smoke-test-invalid, smoke-test-help]
     runs-on: ubuntu-latest
     permissions:
       contents: write
