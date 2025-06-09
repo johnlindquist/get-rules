@@ -113,7 +113,7 @@ async function downloadDirectory(
 	apiUrl,
 	localPath,
 	basePath = "",
-	stats = { downloaded: 0, errors: 0, moved: 0 },
+	stats = { downloaded: 0, errors: 0, moved: 0, movedFiles: [] },
 ) {
 	try {
 		const contents = await httpsGetJson(apiUrl);
@@ -148,8 +148,11 @@ async function downloadDirectory(
 							`${item.name}.${Date.now()}`,
 						);
 						fs.renameSync(localItemPath, tempFilePath);
-						console.log(chalk.dim(`  ↻ ${itemPath} existed, moved to temp`));
 						stats.moved++;
+						stats.movedFiles.push({
+							from: itemPath,
+							to: tempFilePath,
+						});
 					}
 					try {
 						await downloadFile(item.download_url, localItemPath);
@@ -259,13 +262,24 @@ async function main() {
 		console.log(`   • Downloaded: ${chalk.green(stats.downloaded)} files`);
 		if (stats.moved > 0) {
 			console.log(
-				`   • Updated: ${chalk.yellow(
-					stats.moved,
-				)} files (old versions moved to temp)`,
+				`   • Backed up: ${chalk.yellow(stats.moved)} existing files`,
 			);
 		}
 		if (stats.errors > 0) {
 			console.log(`   • Errors: ${chalk.red(stats.errors)} files`);
+		}
+
+		if (stats.movedFiles && stats.movedFiles.length > 0) {
+			console.log();
+			console.log(chalk.yellow("⎯".repeat(60)));
+			console.log(chalk.bold("Existing files were backed up before updating."));
+			console.log(`You can find them in your system's temporary directory:`);
+			console.log(chalk.dim(os.tmpdir()));
+			console.log(chalk.dim("\nMoved files:"));
+			for (const movedFile of stats.movedFiles) {
+				console.log(chalk.dim(`  • ${movedFile.from}`));
+			}
+			console.log(chalk.yellow("⎯".repeat(60)));
 		}
 
 		console.log();
