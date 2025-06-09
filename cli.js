@@ -76,6 +76,38 @@ function httpsGetJson(url) {
 	});
 }
 
+// Helper function to get file content as a buffer
+function httpsGetContent(url) {
+	return new Promise((resolve, reject) => {
+		const options = {
+			headers: {
+				"User-Agent":
+					"get-rules-npm-script/1.0.0 (github.com/johnlindquist/get-rules)",
+			},
+		};
+		https
+			.get(url, options, (res) => {
+				if (res.statusCode < 200 || res.statusCode >= 300) {
+					return reject(
+						new Error(
+							`GitHub API request failed: ${res.statusCode} for ${url}`,
+						),
+					);
+				}
+				const chunks = [];
+				res.on("data", (chunk) => {
+					chunks.push(chunk);
+				});
+				res.on("end", () => {
+					resolve(Buffer.concat(chunks));
+				});
+			})
+			.on("error", (err) => {
+				reject(new Error(`HTTPS request error for ${url}: ${err.message}`));
+			});
+	});
+}
+
 // Helper function to download a file
 function downloadFile(fileUrl, destinationPath) {
 	return new Promise((resolve, reject) => {
@@ -113,7 +145,14 @@ async function downloadDirectory(
 	apiUrl,
 	localPath,
 	basePath = "",
-	stats = { downloaded: 0, errors: 0, moved: 0, movedFiles: [] },
+	stats = {
+		downloaded: 0,
+		errors: 0,
+		moved: 0,
+		movedFiles: [],
+		backupDir: null,
+		skipped: 0,
+	},
 ) {
 	try {
 		const contents = await httpsGetJson(apiUrl);
@@ -138,26 +177,53 @@ async function downloadDirectory(
 				// Recursively download directory contents
 				await downloadDirectory(item.url, localItemPath, itemPath, stats);
 			} else if (item.type === "file") {
-				// Download any file now
 				if (item.download_url) {
-					if (fs.existsSync(localItemPath)) {
-						// Move existing file to temp
-						const tempDir = os.tmpdir();
-						const tempFilePath = path.join(
-							tempDir,
-							`${item.name}.${Date.now()}`,
-						);
-						fs.renameSync(localItemPath, tempFilePath);
-						stats.moved++;
-						stats.movedFiles.push({
-							from: itemPath,
-							to: tempFilePath,
-						});
-					}
 					try {
-						await downloadFile(item.download_url, localItemPath);
-						console.log(chalk.green(`  ✓ Downloaded ${itemPath}`));
-						stats.downloaded++;
+						if (fs.existsSync(localItemPath)) {
+							// File exists, so we download to memory to compare
+							const newContent = await httpsGetContent(item.download_url);
+							const oldContent = fs.readFileSync(localItemPath);
+
+							if (newContent.equals(oldContent)) {
+								// Contents are identical, skip update
+								console.log(chalk.dim(`  ~ Identical, skipped ${itemPath}`));
+								stats.skipped++;
+							} else {
+								// Contents differ, perform backup and update
+								if (!stats.backupDir) {
+									const timestamp = new Date()
+										.toISOString()
+										.replace(/[:.]/g, "-");
+									stats.backupDir = path.join(
+										os.tmpdir(),
+										`get-rules-backup-${timestamp}`,
+									);
+								}
+
+								const backupFilePath = path.join(stats.backupDir, itemPath);
+								const backupFileDir = path.dirname(backupFilePath);
+
+								if (!fs.existsSync(backupFileDir)) {
+									fs.mkdirSync(backupFileDir, { recursive: true });
+								}
+
+								fs.renameSync(localItemPath, backupFilePath);
+								stats.moved++;
+								stats.movedFiles.push({
+									from: itemPath,
+									to: backupFilePath,
+								});
+
+								fs.writeFileSync(localItemPath, newContent);
+								console.log(chalk.green(`  ✓ Updated ${itemPath}`));
+								stats.downloaded++;
+							}
+						} else {
+							// File doesn't exist, just download it
+							await downloadFile(item.download_url, localItemPath);
+							console.log(chalk.green(`  ✓ Downloaded ${itemPath}`));
+							stats.downloaded++;
+						}
 					} catch (downloadError) {
 						console.error(
 							chalk.red(
@@ -260,6 +326,9 @@ async function main() {
 		console.log();
 		console.log(chalk.cyan("📊 Summary:"));
 		console.log(`   • Downloaded: ${chalk.green(stats.downloaded)} files`);
+		if (stats.skipped > 0) {
+			console.log(`   • Skipped: ${chalk.dim(stats.skipped)} identical files`);
+		}
 		if (stats.moved > 0) {
 			console.log(
 				`   • Backed up: ${chalk.yellow(stats.moved)} existing files`,
@@ -273,9 +342,9 @@ async function main() {
 			console.log();
 			console.log(chalk.yellow("⎯".repeat(60)));
 			console.log(chalk.bold("Existing files were backed up before updating."));
-			console.log(`You can find them in your system's temporary directory:`);
-			console.log(chalk.dim(os.tmpdir()));
-			console.log(chalk.dim("\nMoved files:"));
+			console.log(`You can find them in the following directory:`);
+			console.log(chalk.dim(stats.backupDir));
+			console.log(chalk.dim("\nBacked up files:"));
 			for (const movedFile of stats.movedFiles) {
 				console.log(chalk.dim(`  • ${movedFile.from}`));
 			}
