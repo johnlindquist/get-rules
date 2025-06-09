@@ -37,8 +37,8 @@ Rules are organized into directories by category, with files using kebab-case na
 ├── cli/                        # Command-line tool usage rules
 │   ├── github-search.mdc
 │   ├── pack.mdc
-│   ├── worktree.mdc
-│   └── wrangler.mdc
+│   ├── worktree.md
+│   └── wrangler.md
 ├── code/                       # Code-related rules
 │   └── review.mdc
 ├── docs/                       # Documentation generation rules
@@ -55,7 +55,7 @@ Rules are organized into directories by category, with files using kebab-case na
 ├── pnpm/                       # Package manager specific rules
 │   └── fixes.mdc
 ├── project/                    # Project-wide management rules
-│   ├── todos-next.mdc
+│   ├── todos-next.md
 │   └── update-rules.mdc
 ├── prompt/                     # Prompt engineering rules
 │   └── improve.mdc
@@ -64,10 +64,10 @@ Rules are organized into directories by category, with files using kebab-case na
 ├── scripts/                    # Script creation rules
 │   └── create.mdc
 ├── task/                       # Task planning and execution
-│   ├── execute.mdc
+│   ├── execute.md
 │   ├── next.mdc
-│   ├── outline.mdc
-│   └── plan.mdc
+│   ├── outline.md
+│   └── plan.md
 └── zen/                        # Coding philosophy
     └── coding.mdc
 ```
@@ -157,6 +157,6 @@ Rules can be invoked in two ways:
 The AI assistant will select and apply the appropriate rule based on the user's request and the rule's directory/file location. For example:
 - A request about GitHub searching would use `cli/github-search.mdc`
 - A request to create a PRD would use `docs/prd.mdc`
-- A request about task planning would use `task/plan.mdc`
+- A request about task planning would use `task/plan.md`
 - A request to create a pull request would use `git/create.mdc`
 - A request about React best practices would use `react/best-practices.mdc`

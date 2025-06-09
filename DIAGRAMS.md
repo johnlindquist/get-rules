@@ -85,22 +85,22 @@ graph TD
     subgraph "A. Planning Phase"
         Start[User\: I need to implement Feature X] --> PlanDecision{How to plan?};
         
-        PlanDecision -- "Formal Task - (Traceable)" --> PlanGitHub(workflows/github/plan-github.mdc);
+        PlanDecision -- "Formal Task - (Traceable)" --> PlanGitHub(workflows/github/plan-github.md);
         PlanGitHub --> ArtifactGitHub[📄 GitHub Issue with Plan Artifact [Remote]];
 
-        PlanDecision -- "Local Task - (Exploratory)" --> PlanLocal(workflows/task/plan.mdc);
+        PlanDecision -- "Local Task - (Exploratory)" --> PlanLocal(workflows/task/plan.md);
         PlanLocal --> ArtifactLocal[📄 docs/tasks/task-plan.md Artifact [Local]];
     end
 
     subgraph "B. Execution Phase"
-        ArtifactGitHub --> ExecuteGitHub(workflows/github/execute-github.mdc);
-        ArtifactLocal --> ExecuteLocal(workflows/task/execute.mdc);
+        ArtifactGitHub --> ExecuteGitHub(workflows/github/execute-github.md);
+        ArtifactLocal --> ExecuteLocal(workflows/task/execute.md);
 
         %% Interruption & Continuation
-        InterruptedGitHub[Task Interrupted] -.-> ContinueGitHub(workflows/github/continue-github.mdc);
+        InterruptedGitHub[Task Interrupted] -.-> ContinueGitHub(workflows/github/continue-github.md);
         ContinueGitHub --> ExecuteGitHub;
 
-        InterruptedLocal[Task Interrupted] -.-> ContinueLocal(workflows/task/continue.mdc);
+        InterruptedLocal[Task Interrupted] -.-> ContinueLocal(workflows/task/continue.md);
         ContinueLocal --> ExecuteLocal;
 
         ExecuteGitHub --> CodeCommitted[✅ Code is Committed];
@@ -109,9 +109,9 @@ graph TD
 
     subgraph "C. Finalization Phase"
         CodeCommitted --> OptionalReview{Optional: Pre-commit review?};
-        OptionalReview -- Yes --> Review(workflows/github/review-github.mdc);
+        OptionalReview -- Yes --> Review(workflows/github/review-github.md);
         Review --> OptionalReview;
-        OptionalReview -- No --> CreatePR(workflows/github/pr-create-github.mdc);
+        OptionalReview -- No --> CreatePR(workflows/github/pr-create-github.md);
         CreatePR --> PRBody[📄 docs/pr/pr-body.md Artifact\: PR Notes];
         PRBody --> Done[🚀 Pull Request Created];
     end

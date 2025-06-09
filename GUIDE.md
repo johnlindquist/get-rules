@@ -45,25 +45,25 @@ This is the recommended workflow for tasks that are tracked as GitHub Issues. It
 
 #### Typical Sequence:
 
-1.  **Plan the Task (`workflows/github/plan-github.mdc`)**
+1.  **Plan the Task (`workflows/github/plan-github.md`)**
     *   **When:** You have a GitHub issue number and need a detailed implementation plan.
     *   **Action:** You tell the AI, "Plan the work for issue #123."
     *   **Result:** The AI reads project docs (`docs/PRD.md`, `TECH_STACK.md`, etc.) and the user's request, then creates a new GitHub issue with a title like `2023-10-27-14-35-implement-user-auth`. The body of this new issue contains a detailed, multi-commit plan with verification steps.
 
-2.  **Execute the Plan (`workflows/github/execute-github.mdc`)**
+2.  **Execute the Plan (`workflows/github/execute-github.md`)**
     *   **When:** The plan in the GitHub issue is approved and ready for implementation.
     *   **Action:** You say, "Execute the plan in issue #125."
     *   **Result:** The AI systematically works through each commit in the issue body. After each successful commit, it comments on the issue with `✅ <sha> <commit-message>`, creating a live progress log.
 
-3.  **Create the Pull Request (`workflows/github/pr-create-github.mdc`)**
+3.  **Create the Pull Request (`workflows/github/pr-create-github.md`)**
     *   **When:** All commits from the plan have been executed and verified.
     *   **Action:** This can be triggered automatically after `execute-github` or manually by saying, "Create a PR for the current branch."
     *   **Result:** The AI drafts a detailed PR body in `docs/pr/pr-body-file-<branch-name>.md`, pushes the branch, and uses the `gh` CLI to open a pull request, linking it to the original issue.
 
 #### Branching Paths & Alternatives:
 
-*   **Continuing an Interrupted Task:** If the execution was stopped, use `workflows/github/continue-github.mdc`. The AI will check local commits against the `✅` comments in the issue and resume from where it left off.
-*   **Reviewing Changes:** Before creating the PR, you can run `workflows/github/review-github.mdc` to get an AI-driven code review of all staged and unstaged changes.
+*   **Continuing an Interrupted Task:** If the execution was stopped, use `workflows/github/continue-github.md`. The AI will check local commits against the `✅` comments in the issue and resume from where it left off.
+*   **Reviewing Changes:** Before creating the PR, you can run `workflows/github/review-github.md` to get an AI-driven code review of all staged and unstaged changes.
 
 ### Playbook B: The Local Task-File Workflow
 
@@ -74,17 +74,17 @@ This workflow is ideal for exploratory work, rapid prototyping, or when you don'
 
 #### Typical Sequence:
 
-1.  **Plan the Task (`workflows/task/plan.mdc`)**
+1.  **Plan the Task (`workflows/task/plan.md`)**
     *   **When:** You have a task in mind but no GitHub issue.
     *   **Action:** You tell the AI, "Create a plan to implement a new caching layer."
     *   **Result:** The AI creates a new file: `docs/tasks/<timestamp>-caching-layer.md`. This file contains the detailed, multi-commit plan.
 
-2.  **Execute the Plan (`workflows/task/execute.mdc`)**
+2.  **Execute the Plan (`workflows/task/execute.md`)**
     *   **When:** The local task plan is ready.
     *   **Action:** You say, "Execute the plan in `docs/tasks/<timestamp>-caching-layer.md`."
     *   **Result:** The AI works through the commits defined in the local markdown file.
 
-3.  **Create the Pull Request (`workflows/github/pr-create-github.mdc`)**
+3.  **Create the Pull Request (`workflows/github/pr-create-github.md`)**
     *   **When:** The task is complete.
     *   **Action:** "Create a PR for this work."
     *   **Result:** Same as in Playbook A.
@@ -129,15 +129,15 @@ These are specific, one-off rules to solve common development problems.
 | Rule File(s) | Problem Solved | When to Use |
 | :--- | :--- | :--- |
 | **Task Ideation** |
-| `workflows/task/outline.mdc` | I'm not sure about the best way to approach a task. | Before creating a full plan, to get 3-5 high-level options to choose from. |
-| `workflows/task/next.mdc` | I've finished a task and don't know what to do next. | To get a recommendation for the most logical next task based on project goals and documentation. |
-| `workflows/task/todos-next.mdc` | Important `TODO` comments get lost in the codebase. | To scan all documentation for pending `TODO` items and get a prioritized list. |
+| `workflows/task/outline.md` | I'm not sure about the best way to approach a task. | Before creating a full plan, to get 3-5 high-level options to choose from. |
+| `workflows/task/next.md` | I've finished a task and don't know what to do next. | To get a recommendation for the most logical next task based on project goals and documentation. |
+| `workflows/task/todos-next.md` | Important `TODO` comments get lost in the codebase. | To scan all documentation for pending `TODO` items and get a prioritized list. |
 | **Dependency & Scripting** |
 | `workflows/dependencies/audit.mdc` | Dependencies become outdated or have security vulnerabilities. | To perform a comprehensive audit of all project dependencies and generate a plan for updates. |
 | `development/scripts.mdc` | I need to create a new, executable script for a one-off task. | To quickly scaffold a new TypeScript script in the `scripts/` directory, runnable with Bun. |
 | `tools/package-managers/pnpm/build-script-fixes.mdc` | `pnpm` blocks a build script from a trusted dependency. | When an installation fails due to pnpm's security model, to allow a specific dependency to run its build scripts. |
 | **Parallel Development** |
-| `task/parallel.mdc` | A large task needs to be broken down for multiple developers to work on simultaneously without conflicts. | To generate multiple, independent task plans that operate on entirely different sets of files. |
+| `task/parallel.md` | A large task needs to be broken down for multiple developers to work on simultaneously without conflicts. | To generate multiple, independent task plans that operate on entirely different sets of files. |
 
 ---
 
@@ -158,7 +158,7 @@ These rules help you manage and personalize the AI workflow system itself.
 
 These rules are not workflows but act as reference manuals for using specific command-line tools. The AI will consult these when you ask it to perform a task involving one of these tools.
 
-*   `tools/cli/ghx.mdc`: For searching code on GitHub.
-*   `tools/cli/repomix.mdc`: For packing repository files into a single context for AI analysis.
-*   `tools/cli/worktree.mdc`: For managing Git worktrees.
-*   `tools/cli/wrangler.mdc`: For interacting with the Cloudflare developer platform.
+*   `tools/cli/ghx.md`: For searching code on GitHub.
+*   `tools/cli/repomix.md`: For packing repository files into a single context for AI analysis.
+*   `tools/cli/worktree.md`: For managing Git worktrees.
+*   `tools/cli/wrangler.md`: For interacting with the Cloudflare developer platform.
