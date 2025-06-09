@@ -1,6 +1,6 @@
 {
   "name": "get-rules",
-  "version": "1.11.0",
+  "version": "0.0.0",
   "description": "Downloads .mdc rule files for Cursor from johnlindquist/rules-for-tools repository.",
   "main": "cli.js",
   "bin": {
