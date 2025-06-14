@@ -1,0 +1,34 @@
+---
+description:
+  Ensure consistent code style with ESLint and Prettier
+globs:
+
+alwaysApply: false
+---
+# Enforce ESLint and Prettier Standards
+
+**Your task: Use ESLint and Prettier to maintain consistent code style and catch common errors.**
+
+## Setup
+1. Install dependencies if not already present:
+   ```bash
+   pnpm add -D eslint prettier
+   ```
+2. Initialize ESLint if no config exists:
+   ```bash
+   pnpm dlx eslint --init
+   ```
+3. Create a `.prettierrc` (or `prettier.config.js`) to define formatting rules.
+
+## Usage
+- Add scripts to `package.json`:
+  ```json
+  "scripts": {
+    "lint": "eslint .",
+    "format": "prettier --write ."
+  }
+  ```
+- Before committing, run `pnpm lint` and `pnpm format`.
+- Integrate these checks into CI to prevent unformatted or lint errors from reaching the main branch.
+
+**REMEMBER: Code must be formatted with Prettier and pass ESLint checks before each commit.**
